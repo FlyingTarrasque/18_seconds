@@ -1,0 +1,40 @@
+-- Supported values for orientation:
+-- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
+
+settings = {
+	
+	orientation = {
+		default = "portrait",
+		supported = { "portrait", "portraitUpsideDown" }
+	},
+	plugins = {
+		["CoronaProvider.ads.admob"] = {
+			publisherId = "com.coronalabs",
+			supportedPlatforms = { iphone = true, android = true }
+		},
+	},
+	
+	iphone = {
+		plist = {
+			UIStatusBarHidden = true,
+			CFBundleDisplayName = "18 sec",
+			UIAppFonts = {
+				"CabinSketch.ttf"
+      },
+      CFBundleIconFile = "Icon.png",
+			CFBundleIconFiles = {
+				"Icon.png", 
+				"Icon@2x.png", 
+				"Icon-72.png", 
+			}
+		}
+	},
+	
+	-- Android permissions
+
+	androidPermissions = {
+  	"android.permission.INTERNET",
+		"android.permission.ACCESS_NETWORK_STATE",
+		"android.permission.VIBRATE"
+  }
+}
