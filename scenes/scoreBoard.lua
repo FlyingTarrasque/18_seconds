@@ -33,7 +33,6 @@ function blinkRestartText()
 end
 
 function scene:createScene(event)
-	ads:show()
 	local group = self.view 
 
 	thisGameScore = tonumber(event.params["thisGameScore"])

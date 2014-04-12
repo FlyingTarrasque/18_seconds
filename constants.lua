@@ -1,4 +1,4 @@
-_G.fontType = 'Arial'
+_G.fontType = '8BIT WONDER'
 _G.halfW = display.contentWidth*0.5
 _G.halfH = display.contentHeight*0.5
 _G.screenW = display.contentWidth

@@ -8,7 +8,8 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local title = display.newGroup()
-title:insert(display.newText("18 sec", halfW, 140, fontType, 40))
+title:insert(display.newText("Crushes", halfW, 140, fontType, 40))
+title:insert(display.newText("Finger", halfW, 180, fontType, 40))
 
 local playBtn = display.newText("Tap to START!", halfW, 100, fontType, 20)
 local blickTimer = 0

@@ -28,8 +28,8 @@ Ads_mt = { __index = Ads }
 function Ads:new()
 	local self = {
 		provider = "admob",
-		appIOSID = "ca-app-pub-4502761084086592/2169311666",
-		appAndroidID = "ca-app-pub-4502761084086592/3227242464"
+		appIOSID = "ca-app-pub-4502761084086592/8523664468",
+		appAndroidID = "ca-app-pub-4502761084086592/7186532061"
 	}
 	if ( system.getInfo("platformName") == "Android" ) then
 		ads.init(self.provider, self.appAndroidID, adListener)
