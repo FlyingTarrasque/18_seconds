@@ -24,8 +24,19 @@ local square = display.newRect(120, 110, 57, 57)
 square:setFillColor(0, 0, 30)
 
 local finger = display.newCircle( halfW, halfH, 20 )
+finger.alpha = 0
 finger:setFillColor( 255,0,0 )
 finger.name = "finger"
+
+local function blinkFingerPosition()
+	if(finger.alpha < 1) then
+  	transition.to(finger, {time=490, alpha=1})
+	else 
+  	transition.to(finger, {time=490, alpha=0.1})
+  end
+end
+
+local fingerPointTimer = timer.performWithDelay(500, function() pcall(blinkFingerPosition) end, 0)
 
 left = display.newLine(0, screenH, 0, 0)
 right = display.newLine(screenW, screenH, screenW + 2, 0)
@@ -37,11 +48,15 @@ left.isVisible = false
 right.isVisible = false
 bottom.isVisible = false
 
+local function countTime(event)
+	score.text = tonumber(score.text or "0") + 0.001
+end
+
 local function finishGame()
 	if(gameEnded == true)then
 		return true
 	end
-	timer.cancel(scoreTimer)
+	Runtime:removeEventListener( "enterFrame", countTime )
 	gameEnded = true
 
 	local options = {
@@ -84,16 +99,12 @@ local function onTouchListener( event )
 	return true
 end
 
-local function countTime()
-	score.text = tonumber(score.text) + 0.001
-end
-
 local function addEventListeners()
 	finger:addEventListener( "touch", onTouchListener )
 end
 
 local function removeEventListeners()
-	finger:addEventListener( "touch", onTouchListener )
+	finger:removeEventListener( "touch", onTouchListener )
 end
 
 local function addStaticBody(obj)
@@ -168,7 +179,9 @@ function startGame()
 	move(fatRect)
 	move(largeVerticalRect)
 	move(largeHorizontalRect)
-	scoreTimer = timer.performWithDelay(1, countTime, 0)
+	Runtime:addEventListener( "enterFrame", countTime )
+	timer.cancel(fingerPointTimer)
+	finger.isVisible = false
 
 	gameStarted = true
 end	
