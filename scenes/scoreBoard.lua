@@ -77,7 +77,7 @@ function scene:destroyScene( event )
 	local group = self.view
 	
 	Runtime:removeEventListener('tap', playAgain)
-	timer.cancel(blinkTimer)
+	pcall(timer.cancel(blinkTimer))
 	group:removeSelf()
 end
 

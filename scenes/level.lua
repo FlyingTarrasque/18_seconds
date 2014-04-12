@@ -94,11 +94,13 @@ local function onTouchListener( event )
 			t.x = event.x - t.x0
 			t.y = event.y - t.y0
 			if (t.y > 418 or t.x > 418) or (t.y < 80 or t.x < 80) then
+				system.vibrate()
 				finishGame()
 			end
 		elseif "ended" == phase or "cancelled" == phase then
 			display.getCurrentStage():setFocus( t, nil )
 			t.isFocus = false
+			finishGame()
 		end
 	end
 	return true
@@ -134,6 +136,9 @@ end
 function scene:createScene(event)
 	local group = self.view
 
+	gameEnded = false
+	gameStarted = false
+
 	storyboard.removeScene(scenesDir .."scoreBoard")
 
 	group:insert(middleArea)
@@ -162,6 +167,7 @@ end
 
 local function onCollision( event )
 	if(event.object1.name ~= nil or event.object2.name ~= nil) then
+		system.vibrate()
 		finishGame()
 		return true
 	end

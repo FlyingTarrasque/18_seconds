@@ -17,7 +17,7 @@ settings = {
 	iphone = {
 		plist = {
 			UIStatusBarHidden = true,
-			CFBundleDisplayName = "18 sec",
+			CFBundleDisplayName = "Crushes Finger",
 			UIAppFonts = {
 				"CabinSketch.ttf"
       },
