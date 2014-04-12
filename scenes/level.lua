@@ -13,6 +13,8 @@ largeHorizontalRect:setFillColor(0, 0, 30)
 local largeVerticalRect = display.newRect(middleArea.x - 130, middleArea.y + 130, 30, 75)
 largeVerticalRect:setFillColor(0, 0, 30)
 
+local finger = display.newCircle( halfW, halfH, 20 )
+finger:setFillColor( 255,0,0 )
 
 left = display.newLine(0, screenH, 0, 0)
 right = display.newLine(screenW, screenH, screenW + 2, 0)
@@ -24,11 +26,37 @@ left.isVisible = false
 right.isVisible = false
 bottom.isVisible = false
 
+local function onTouchListener( event )
+	local t = event.target
+
+	local phase = event.phase
+	if "began" == phase then
+		local parent = t.parent
+		parent:insert( t )
+		display.getCurrentStage():setFocus( t, event.id )
+
+		t.isFocus = true
+
+		t.x0 = event.x - t.x
+		t.y0 = event.y - t.y
+	elseif t.isFocus then
+		if "moved" == phase then
+			t.x = event.x - t.x0
+			t.y = event.y - t.y0
+		elseif "ended" == phase or "cancelled" == phase then
+			display.getCurrentStage():setFocus( t, nil )
+			t.isFocus = false
+		end
+	end
+	return true
+end
+
 function collisionListener(event)
 	
 end
 
 local function addEventListeners()
+	finger:addEventListener( "touch", onTouchListener )
 	--Runtime:addEventListener('enterFrame', resizeCallback)
 	--Runtime:addEventListener('touch', onBarMove)
 	--Runtime:addEventListener('collision', collisionListener)
