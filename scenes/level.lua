@@ -3,6 +3,7 @@ local scene = storyboard.newScene()
 
 local physics = require "physics"
 --physics.setDrawMode("hybrid")
+local score = 0
 
 local gameStarted = false
 
@@ -104,6 +105,7 @@ function scene:createScene(event)
 	group:insert(largeHorizontalRect)
 	group:insert(square)
 	group:insert(fatRect)
+	group:insert(finger)
 
 	addEventListeners()
 	configAndStartPhysics()
@@ -123,7 +125,13 @@ end
 
 local function onCollision( event )
 	if(event.object1.name ~= nil or event.object2.name ~= nil) then
-		print ("PERDEU")
+		local options = {
+		  effect = "fade",
+		  time = 500,
+		  params = {thisGameScore = score}
+		}
+
+		storyboard.gotoScene(scenesDir .. "scoreBoard", options)
 	end
 end
  
@@ -154,7 +162,8 @@ end
 function scene:exitScene(event)
 	local group = self.view
 
-	removeEventListeners()
+	removeEventListeners()	
+	timer.performWithDelay(50, function() physics.stop() end, 1)
 end
 
 function scene:destroyScene(event)

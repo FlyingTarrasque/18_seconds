@@ -10,15 +10,13 @@ local finalScore = display.newText("", halfW, 130, fontType, 30)
 local lastScore  = display.newText("", halfW, 170, fontType, 30)
 local playAgain  = display.newText("Tap to play again!", halfW, 200, fontType, 15)
 
-local meme
-
-finalScore.alpha = 0
-playAgain.alpha  = 0 
-
 local blinkTimer
 
 function playAgain:tap(event)
 	local options = {effect = "fade", time = 500}
+
+	storyboard.removeScene(scenesDir .. "level")
+	storyboard.gotoScene(scenesDir .. "level", options)
 end
 
 Runtime:addEventListener('tap', playAgain)
@@ -34,6 +32,9 @@ end
 function scene:createScene(event)
 	ads:show()
 	local group = self.view
+
+	finalScore.alpha = 0
+	playAgain.alpha  = 0 
 
 	thisGameScore = tonumber(event.params["thisGameScore"])
 
