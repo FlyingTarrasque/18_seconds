@@ -9,9 +9,9 @@ require("constants")
 
 display.setStatusBar(display.HiddenStatusBar)
 
-local background = display.newImageRect(imagesDir .. "background.png", display.contentWidth, display.contentHeight)
-background.anchorX, background.anchorY = 0, 0
-background.x, background.y = 0, 0
+local background = display.newImageRect(imagesDir .. "background.png", display.actualContentWidth, display.actualContentHeight)
+background.anchorX, background.anchorY = display.screenOriginX, display.screenOriginY
+background.x, background.y = display.screenOriginX, display.screenOriginY
 require("utils.ads")
 require("utils.ice")
 require("utils.ratePopup")
