@@ -5,7 +5,7 @@ local adType = "banner"
 local messages = display.newText('', halfW, 100, "Arial", 12)
 
 local showAds = function()
-	local adX, adY = display.screenOriginX, display.actualContentHeight - 100
+	local adX, adY = halfW, display.actualContentHeight-10
 	ads.show(adType, {x=adX, y=adY, interval=30})
 end
 
