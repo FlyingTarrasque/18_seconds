@@ -54,7 +54,7 @@ right.isVisible = false
 bottom.isVisible = false
 
 local function countTime(event)
-	score.text = tonumber(score.text or "0") + 0.001
+	score.text = tonumber(score.text or "0") + 0.01
 end
 
 local function finishGame()

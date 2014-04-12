@@ -69,8 +69,6 @@ end
 
 function scene:exitScene( event )
 	local group = self.view
-
-	ads:hide()
 end
 
 function scene:destroyScene( event )

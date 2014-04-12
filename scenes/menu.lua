@@ -49,7 +49,6 @@ function scene:exitScene( event )
 	local group = self.view
 
 	title:removeSelf()
-	ads:hide()
 
 	Runtime:removeEventListener('tap', startGame)
 	timer.cancel(blinkTimer)
