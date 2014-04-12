@@ -8,14 +8,15 @@ local score = 0
 local gameStarted = false
 
 local middleArea = display.newRect(halfW, halfH, 375, 375)
-local largeHorizontalRect = display.newRect(middleArea.x + 120, middleArea.y + 130, 120, 25)
+local largeHorizontalRect = display.newRect(370, 380, 120, 25)
 largeHorizontalRect:setFillColor(0, 0, 30)
 
-local largeVerticalRect = display.newRect(middleArea.x - 130, middleArea.y + 130, 30, 75)
+local largeVerticalRect = display.newRect(120, 380, 30, 75)
 largeVerticalRect:setFillColor(0, 0, 30)
 
-local fatRect = display.newRect(middleArea.x + 120, 110, 68, 50)
+local fatRect = display.newRect(370, 110, 68, 50)
 fatRect:setFillColor(0, 0, 30)
+
 
 local square = display.newRect(120, 110, 57, 57)
 square:setFillColor(0, 0, 30)
@@ -34,6 +35,16 @@ left.isVisible = false
 right.isVisible = false
 bottom.isVisible = false
 
+local function finishGame()
+	local options = {
+	  effect = "fade",
+	  time = 500,
+	  params = {thisGameScore = score}
+	}
+
+	storyboard.gotoScene(scenesDir .. "scoreBoard", options)
+end
+
 local function onTouchListener( event )
 	local t = event.target
 
@@ -51,6 +62,9 @@ local function onTouchListener( event )
 		if "moved" == phase then
 			t.x = event.x - t.x0
 			t.y = event.y - t.y0
+			if (t.y > 418 or t.x > 418) or (t.y < 80 or t.x < 80) then
+				finishGame()
+			end
 		elseif "ended" == phase or "cancelled" == phase then
 			display.getCurrentStage():setFocus( t, nil )
 			t.isFocus = false
@@ -125,13 +139,7 @@ end
 
 local function onCollision( event )
 	if(event.object1.name ~= nil or event.object2.name ~= nil) then
-		local options = {
-		  effect = "fade",
-		  time = 500,
-		  params = {thisGameScore = score}
-		}
-
-		storyboard.gotoScene(scenesDir .. "scoreBoard", options)
+		finishGame()
 	end
 end
  
