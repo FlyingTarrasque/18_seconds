@@ -10,18 +10,22 @@ local gameEnded = false
 local gameStarted = false
 
 local middleArea = display.newRect(halfW, halfH, 375, 375)
-local largeHorizontalRect = display.newRect(370, 380, 120, 25)
-largeHorizontalRect:setFillColor(0, 0, 30)
 
-local largeVerticalRect = display.newRect(120, 380, 30, 75)
-largeVerticalRect:setFillColor(0, 0, 30)
+--local largeHorizontalRect = display.newRect(370, 380, 120, 25)
+local largeHorizontalRect = display.newImage(imagesDir .. "largeHorizontalRect.png", 370, 380, 120, 25)
+--largeHorizontalRect:setFillColor(0, 0, 30)
 
-local fatRect = display.newRect(370, 110, 68, 50)
-fatRect:setFillColor(0, 0, 30)
+--local largeVerticalRect = display.newRect(120, 380, 30, 75)
+local largeVerticalRect = display.newImage(imagesDir .. "largeVerticalRect.png", 120, 380, 30, 75)
+--largeVerticalRect:setFillColor(0, 0, 30)
 
+--local fatRect = display.newRect(370, 110, 68, 50)
+local fatRect = display.newImage(imagesDir .. "fatRect.png", 370, 110, 68, 50)
+--fatRect:setFillColor(0, 0, 30)
 
-local square = display.newRect(120, 110, 57, 57)
-square:setFillColor(0, 0, 30)
+--local square = display.newRect(120, 110, 57, 57)
+local square = display.newImage(imagesDir .. "square.png", 120, 110, 57, 57)
+--square:setFillColor(0, 0, 30)
 
 local finger = display.newCircle( halfW, halfH, 20 )
 finger.alpha = 0
