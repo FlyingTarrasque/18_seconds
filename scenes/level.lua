@@ -3,9 +3,11 @@ local scene = storyboard.newScene()
 
 local physics = require "physics"
 --physics.setDrawMode("hybrid")
-local score = 0
+local score = display.newText("0", halfW, -100, fontType, 20)
+local scoreTimer
 
 local gameEnded = false
+local gameStarted = false
 
 local middleArea = display.newRect(halfW, halfH, 375, 375)
 local largeHorizontalRect = display.newRect(370, 380, 120, 25)
@@ -39,12 +41,13 @@ local function finishGame()
 	if(gameEnded == true)then
 		return true
 	end
+	timer.cancel(scoreTimer)
 	gameEnded = true
 
 	local options = {
 	  effect = "fade",
 	  time = 500,
-	  params = {thisGameScore = score}
+	  params = {thisGameScore = tonumber(score.text)}
 	}
 
 	storyboard.gotoScene(scenesDir .. "scoreBoard", options)
@@ -55,6 +58,9 @@ local function onTouchListener( event )
 
 	local phase = event.phase
 	if "began" == phase then
+		if(gameStarted == false)then
+			startGame()
+		end
 		local parent = t.parent
 		parent:insert( t )
 		display.getCurrentStage():setFocus( t, event.id )
@@ -78,21 +84,16 @@ local function onTouchListener( event )
 	return true
 end
 
-function collisionListener(event)
-	
+local function countTime()
+	score.text = tonumber(score.text) + 0.001
 end
 
 local function addEventListeners()
 	finger:addEventListener( "touch", onTouchListener )
-	--Runtime:addEventListener('enterFrame', resizeCallback)
-	--Runtime:addEventListener('touch', onBarMove)
-	--Runtime:addEventListener('collision', collisionListener)
 end
 
 local function removeEventListeners()
-	--Runtime:removeEventListener('enterFrame', resizeCallback)
-	--Runtime:removeEventListener('touch', onBarMove)
-	--Runtime:removeEventListener('collision', collisionListener)
+	finger:addEventListener( "touch", onTouchListener )
 end
 
 local function addStaticBody(obj)
@@ -120,6 +121,7 @@ function scene:createScene(event)
 	storyboard.removeScene(scenesDir .."scoreBoard")
 
 	group:insert(middleArea)
+	group:insert(score)
 	group:insert(largeVerticalRect)
 	group:insert(largeHorizontalRect)
 	group:insert(square)
@@ -159,9 +161,6 @@ function scene:enterScene(event)
 	addDynamicBody(square, { categoryBits = 2, maskBits = 3, groupIndex = -1 } )
 	addDynamicBody(fatRect, { categoryBits = 2, maskBits = 3, groupIndex = -1 } )
 	addStaticBody(finger, {categoryBits = 3, groupIndex = 1})
-
-	finger:addEventListener('touch', startGame)
-	
 end
 
 function startGame()
@@ -169,14 +168,15 @@ function startGame()
 	move(fatRect)
 	move(largeVerticalRect)
 	move(largeHorizontalRect)
-	finger:removeEventListener( "touch", startGame )
-	return true
+	scoreTimer = timer.performWithDelay(1, countTime, 0)
+
+	gameStarted = true
 end	
 
 function scene:exitScene(event)
 	local group = self.view
 
-	removeEventListeners()	
+	removeEventListeners()
 	timer.performWithDelay(50, function() physics.stop() end, 1)
 end
 
