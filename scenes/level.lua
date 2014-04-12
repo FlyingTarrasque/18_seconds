@@ -2,7 +2,7 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local physics = require "physics"
-physics.setDrawMode("hybrid")
+--physics.setDrawMode("hybrid")
 
 local gameStarted = false
 
@@ -21,6 +21,7 @@ square:setFillColor(0, 0, 30)
 
 local finger = display.newCircle( halfW, halfH, 20 )
 finger:setFillColor( 255,0,0 )
+finger.name = "finger"
 
 left = display.newLine(0, screenH, 0, 0)
 right = display.newLine(screenW, screenH, screenW + 2, 0)
@@ -75,7 +76,7 @@ local function removeEventListeners()
 end
 
 local function addStaticBody(obj)
-	physics.addBody(obj, 'static', {bounce = 0.95, filter = physicBodyFilter})
+	physics.addBody(obj, 'static', {bounce = 1, filter = physicBodyFilter})
 end
 
 local function configAndStartPhysics()
@@ -89,7 +90,7 @@ local function configAndStartPhysics()
 end
 
 local function addDynamicBody(obj, bodyFilter)
-	physics.addBody(obj, 'dynamic', {bounce = 0.95, filter = bodyFilter})
+	physics.addBody(obj, 'dynamic', {bounce = 1, filter = bodyFilter})
 	obj.isFixedRotation = true
 end
 
@@ -108,19 +109,47 @@ function scene:createScene(event)
 	configAndStartPhysics()
 end
 
+function move(obj)
+	local direcaoX = math.random(-1,1)
+	local direcaoY = math.random(-1,1)
+	while (direcaoX == 0) do
+		direcaoX = math.random(-1,1)
+	end
+	while (direcaoY == 0) do
+		direcaoY = math.random(-1,1)
+	end
+	obj:setLinearVelocity(200 * direcaoX, 500 * direcaoY)
+end
+
+local function onCollision( event )
+	if(event.object1.name ~= nil or event.object2.name ~= nil) then
+		print ("PERDEU")
+	end
+end
+ 
+Runtime:addEventListener( "collision", onCollision )
+
 function scene:enterScene(event)
 	local group = self.view
 
-	addDynamicBody(largeVerticalRect, { categoryBits = 2, maskBits = 3 } )
-	addDynamicBody(largeHorizontalRect, { categoryBits = 4, maskBits = 5 } )
-	addDynamicBody(square, { categoryBits = 6, maskBits = 7 } )
-	addDynamicBody(fatRect, { categoryBits = 8, maskBits = 9 } )
+	addDynamicBody(largeVerticalRect, { categoryBits = 2, maskBits = 3, groupIndex = -1 } )
+	addDynamicBody(largeHorizontalRect, { categoryBits = 2, maskBits = 3, groupIndex = -1 } )
+	addDynamicBody(square, { categoryBits = 2, maskBits = 3, groupIndex = -1 } )
+	addDynamicBody(fatRect, { categoryBits = 2, maskBits = 3, groupIndex = -1 } )
+	addStaticBody(finger, {categoryBits = 3, groupIndex = 1})
 
-	largeVerticalRect:applyLinearImpulse(10, 10)
-	largeHorizontalRect:applyLinearImpulse(-10, -10)
-	square:applyLinearImpulse(20, -20)
-	fatRect:applyLinearImpulse(-20, 20)
+	finger:addEventListener('touch', startGame)
+	
 end
+
+function startGame()
+	move(square)
+	move(fatRect)
+	move(largeVerticalRect)
+	move(largeHorizontalRect)
+	finger:removeEventListener( "touch", startGame )
+	return true
+end	
 
 function scene:exitScene(event)
 	local group = self.view
