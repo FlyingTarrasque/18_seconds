@@ -5,7 +5,7 @@ local physics = require "physics"
 --physics.setDrawMode("hybrid")
 local score = 0
 
-local gameStarted = false
+local gameEnded = false
 
 local middleArea = display.newRect(halfW, halfH, 375, 375)
 local largeHorizontalRect = display.newRect(370, 380, 120, 25)
@@ -36,6 +36,11 @@ right.isVisible = false
 bottom.isVisible = false
 
 local function finishGame()
+	if(gameEnded == true)then
+		return true
+	end
+	gameEnded = true
+
 	local options = {
 	  effect = "fade",
 	  time = 500,
@@ -140,10 +145,11 @@ end
 local function onCollision( event )
 	if(event.object1.name ~= nil or event.object2.name ~= nil) then
 		finishGame()
+		return true
 	end
 end
  
-Runtime:addEventListener( "collision", onCollision )
+Runtime:addEventListener("collision", onCollision)
 
 function scene:enterScene(event)
 	local group = self.view

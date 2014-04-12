@@ -10,6 +10,9 @@ local finalScore = display.newText("", halfW, 130, fontType, 30)
 local lastScore  = display.newText("", halfW, 170, fontType, 30)
 local playAgain  = display.newText("Tap to play again!", halfW, 200, fontType, 15)
 
+finalScore.alpha = 0
+playAgain.alpha  = 0
+
 local blinkTimer
 
 function playAgain:tap(event)
@@ -31,10 +34,7 @@ end
 
 function scene:createScene(event)
 	ads:show()
-	local group = self.view
-
-	finalScore.alpha = 0
-	playAgain.alpha  = 0 
+	local group = self.view 
 
 	thisGameScore = tonumber(event.params["thisGameScore"])
 
@@ -52,7 +52,7 @@ function scene:enterScene( event )
 	ratePopup:show()
 
 	transition.to(finalScore, {time=200, alpha=1})
-	blinkTimer = timer.performWithDelay(500, blinkRestartText, 0)
+	blinkTimer = timer.performWithDelay(500, function() pcall(blinkRestartText) end, 0)
 
 	local actualBestScore = oldScores:retrieve("best") or 0
 	showMedal(group, actualBestScore, thisGameScore)
