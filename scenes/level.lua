@@ -88,8 +88,8 @@ local function configAndStartPhysics()
 	addStaticBody(up)
 end
 
-local function addDynamicBody(obj)
-	physics.addBody(obj, 'dynamic', {bounce = 0.95, filter = physicBodyFilter})
+local function addDynamicBody(obj, bodyFilter)
+	physics.addBody(obj, 'dynamic', {bounce = 0.95, filter = bodyFilter})
 	obj.isFixedRotation = true
 end
 
@@ -111,10 +111,10 @@ end
 function scene:enterScene(event)
 	local group = self.view
 
-	addDynamicBody(largeVerticalRect)
-	addDynamicBody(largeHorizontalRect)
-	addDynamicBody(square)
-	addDynamicBody(fatRect)
+	addDynamicBody(largeVerticalRect, { categoryBits = 2, maskBits = 3 } )
+	addDynamicBody(largeHorizontalRect, { categoryBits = 4, maskBits = 5 } )
+	addDynamicBody(square, { categoryBits = 6, maskBits = 7 } )
+	addDynamicBody(fatRect, { categoryBits = 8, maskBits = 9 } )
 
 	largeVerticalRect:applyLinearImpulse(10, 10)
 	largeHorizontalRect:applyLinearImpulse(-10, -10)
