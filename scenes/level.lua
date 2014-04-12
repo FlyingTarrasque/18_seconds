@@ -6,27 +6,28 @@ local physics = require "physics"
 
 local gameStarted = false
 
-local middleArea = display.newRect(halfW, halfH, 375, 375)
-local largeHorizontalRect = display.newRect(middleArea.x + 120, middleArea.y + 130, 120, 25)
+local middleArea = display.newRect(halfW, halfH, 500, 500)
+
+local largeHorizontalRect = display.newRect(middleArea.x + 155, middleArea.y + 145, 155, 30)
 largeHorizontalRect:setFillColor(0, 0, 30)
 
-local largeVerticalRect = display.newRect(middleArea.x - 130, middleArea.y + 130, 30, 75)
+local largeVerticalRect = display.newRect(middleArea.x - 190, middleArea.y + 155, 45, 90)
 largeVerticalRect:setFillColor(0, 0, 30)
 
-local fatRect = display.newRect(middleArea.x + 120, 110, 68, 50)
+local fatRect = display.newRect(middleArea.x + 120, 70, 85, 70)
 fatRect:setFillColor(0, 0, 30)
 
-local square = display.newRect(120, 110, 57, 57)
+local square = display.newRect(80, 85, 85, 85)
 square:setFillColor(0, 0, 30)
 
-local finger = display.newCircle( halfW, halfH, 20 )
+local finger = display.newCircle( halfW, halfH, 30 )
 finger:setFillColor( 255,0,0 )
 finger.name = "finger"
 
-left = display.newLine(0, screenH, 0, 0)
-right = display.newLine(screenW, screenH, screenW + 2, 0)
-up = display.newLine(0, 0, screenW, 0)
-bottom = display.newLine(screenW, screenH, 0, screenH)
+left = display.newLine(-60, screenH + 60, -60, -60)
+right = display.newLine(screenW+60, screenH+60, screenW+60, -60)
+up = display.newLine(-60, -60, screenW + 60, -60)
+bottom = display.newLine(-60, screenH + 60, screenW+60, screenH+60)
 
 up.isVisible = false
 left.isVisible = false
