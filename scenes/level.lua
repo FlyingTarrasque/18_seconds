@@ -13,6 +13,12 @@ largeHorizontalRect:setFillColor(0, 0, 30)
 local largeVerticalRect = display.newRect(middleArea.x - 130, middleArea.y + 130, 30, 75)
 largeVerticalRect:setFillColor(0, 0, 30)
 
+local fatRect = display.newRect(middleArea.x + 120, 110, 68, 50)
+fatRect:setFillColor(0, 0, 30)
+
+local square = display.newRect(120, 110, 57, 57)
+square:setFillColor(0, 0, 30)
+
 local finger = display.newCircle( halfW, halfH, 20 )
 finger:setFillColor( 255,0,0 )
 
@@ -82,10 +88,20 @@ local function configAndStartPhysics()
 	addStaticBody(up)
 end
 
+local function addDynamicBody(obj)
+	physics.addBody(obj, 'dynamic', {bounce = 0.95, filter = physicBodyFilter})
+end
+
 function scene:createScene(event)
 	local group = self.view
 
 	storyboard.removeScene(scenesDir .."scoreBoard")
+
+	group:insert(middleArea)
+	group:insert(largeVerticalRect)
+	group:insert(largeHorizontalRect)
+	group:insert(square)
+	group:insert(fatRect)
 
 	addEventListeners()
 	configAndStartPhysics()
@@ -93,6 +109,16 @@ end
 
 function scene:enterScene(event)
 	local group = self.view
+
+	addDynamicBody(largeVerticalRect)
+	addDynamicBody(largeHorizontalRect)
+	addDynamicBody(square)
+	addDynamicBody(fatRect)
+
+	largeVerticalRect:applyLinearImpulse(10, 10)
+	largeHorizontalRect:applyLinearImpulse(-10, -10)
+	square:applyLinearImpulse(20, -20)
+	fatRect:applyLinearImpulse(-20, 20)
 end
 
 function scene:exitScene(event)
