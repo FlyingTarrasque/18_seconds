@@ -20,4 +20,4 @@ require("utils.ratePopup")
 local storyboard = require "storyboard"
 
 -- load menu screen
-storyboard.gotoScene(scenesDir .. "menu")
+storyboard.gotoScene(scenesDir .. "level")

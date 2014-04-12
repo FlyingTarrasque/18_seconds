@@ -22,7 +22,7 @@ local blinkStartText = function()
 end
 
 local startGame = function(event)
-	--storyboard.gotoScene(scenesDir .. "level1", "fade", 500 )
+	storyboard.gotoScene(scenesDir .. "level", "fade", 500 )
 	return true
 end
 
