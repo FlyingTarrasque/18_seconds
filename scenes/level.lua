@@ -90,6 +90,7 @@ end
 
 local function addDynamicBody(obj)
 	physics.addBody(obj, 'dynamic', {bounce = 0.95, filter = physicBodyFilter})
+	obj.isFixedRotation = true
 end
 
 function scene:createScene(event)
