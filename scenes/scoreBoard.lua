@@ -13,7 +13,7 @@ local playAgain  = display.newText("Tap to play again!", halfW, 200, fontType, 1
 finalScore.alpha = 0
 playAgain.alpha  = 0
 
-local blinkTimer
+local blinkTimer = 0
 
 function playAgain:tap(event)
 	local options = {effect = "fade", time = 500}
