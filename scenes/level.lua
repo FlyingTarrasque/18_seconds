@@ -9,7 +9,8 @@ local scoreTimer
 local gameEnded = false
 local gameStarted = false
 
-local middleArea = display.newRect(halfW, halfH, 375, 375)
+--local middleArea = display.newRect(halfW, halfH, 375, 375)
+local middleArea = display.newImage(imagesDir .. "middle_area.png", halfW, halfH, 375, 375)
 
 --local largeHorizontalRect = display.newRect(370, 380, 120, 25)
 local largeHorizontalRect = display.newImage(imagesDir .. "largeHorizontalRect.png", 370, 380, 120, 25)
