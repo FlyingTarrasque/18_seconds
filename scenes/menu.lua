@@ -23,7 +23,7 @@ local blinkText = function(btn, fn)
 	  end
 	end
 
-  timer.performWithDelay(150, function() pcall(callback) end, 5)
+  timer.performWithDelay(150, function() pcall(callback) end, 6)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 

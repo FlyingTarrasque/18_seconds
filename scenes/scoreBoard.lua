@@ -22,7 +22,7 @@ local blinkText = function(btn, fn)
 	  end
 	end
 
-  timer.performWithDelay(150, function() pcall(callback) end, 5)
+  timer.performWithDelay(150, function() pcall(callback) end, 6)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 
@@ -75,7 +75,6 @@ function leaderboardBtn:tap(event)
 		    listener = leaderboarListener
 			});
 		end
-		playBtn.isVisible = true
 	end
 	print("leaderboard")
 	blinkText(leaderboardBtn, callback)
