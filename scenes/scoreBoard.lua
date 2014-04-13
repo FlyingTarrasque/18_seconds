@@ -105,8 +105,6 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	ratePopup:show()
-	gameNetwork.show( "leaderboards" )
-
 	transition.to(finalScore, {time=200, alpha=1})
 
 	local actualBestScore = oldScores:retrieve("best") or 0
@@ -115,11 +113,6 @@ function scene:enterScene( event )
 	if(actualBestScore < thisGameScore) then
 		oldScores:store("best", thisGameScore)
 		oldScores:save()
-
-		local function postScoreSubmit( event )
-   		--whatever code you need following a score submission...
-   		return true
-		end
 
 		finalScore.text = "Best score now: " .. tostring(thisGameScore)
 	else
@@ -134,10 +127,10 @@ end
 
 function scene:destroyScene( event )
 	local group = self.view
-	--print("destroy")
-	playAgainBtn:removeEventListener('tap', playAgain)
-	submitScoreBtn:removeEventListener('tap', submitScore)
-	leaderboardBtn:removeEventListener('tap', showLeaderboard)
+	print("destroy")
+	playAgainBtn:removeEventListener('tap', playAgainBtn)
+	submitScoreBtn:removeEventListener('tap', submitScoreBtn)
+	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
 	
 	group:removeSelf()
 end
