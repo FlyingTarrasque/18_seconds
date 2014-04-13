@@ -22,17 +22,6 @@ application = {
 settings = {
     orientation = {
         default = 'portrait'
-    },
-    android ={
-        googlePlayGamesAppId = "57559416678" -- Your Google Play Games App Id
-    },
-    plugins ={
-        -- key is the name passed to Lua's 'require()'
-        ["CoronaProvider.gameNetwork.google"] = {
-            -- required
-            publisherId = "com.coronalabs",
-        },
     }
-
 }
 

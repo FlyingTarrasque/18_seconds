@@ -2,16 +2,22 @@
 -- portrait, portraitUpsideDown, landscapeLeft, landscapeRight
 
 settings = {
-	
 	orientation = {
 		default = "portrait",
 		supported = { "portrait", "portraitUpsideDown" }
 	},
+	android = {
+    googlePlayGamesAppId = "57559416678" -- Your Google Play Games App Id
+  },
 	plugins = {
 		["CoronaProvider.ads.admob"] = {
 			publisherId = "com.coronalabs",
 			supportedPlatforms = { iphone = true, android = true }
 		},
+		["CoronaProvider.gameNetwork.google"] = {
+        -- required
+        publisherId = "com.coronalabs",
+    }
 	},
 	
 	iphone = {
@@ -19,7 +25,7 @@ settings = {
 			UIStatusBarHidden = true,
 			CFBundleDisplayName = "Crushes Finger",
 			UIAppFonts = {
-				"CabinSketch.ttf"
+				"8BIT WONDER.ttf"
       },
       CFBundleIconFile = "Icon.png",
 			CFBundleIconFiles = {
