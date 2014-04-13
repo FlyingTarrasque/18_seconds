@@ -1,4 +1,4 @@
-_G.fontType = '8BIT WONDER'
+_G.fontType = '8-bit'
 _G.halfW = display.contentWidth*0.5
 _G.halfH = display.contentHeight*0.5
 _G.screenW = display.contentWidth
@@ -13,4 +13,5 @@ _G.soundsDir = "assets/sounds/"
 _G.scenesDir = "scenes."
 _G.initialAmount = 10
 _G.appleStoreIdApp = "appId"
-_G.googlePlayIdApp = "appId"
+_G.googlePlayIdApp = "com.gmail.pedrohenriquerls.crushes_finger"
+_G.leaderboardId = "CgkI5v67ttYBEAIQAA"

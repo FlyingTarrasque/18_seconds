@@ -8,37 +8,56 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local title = display.newGroup()
-title:insert(display.newText("Crushes", halfW, 140, fontType, 40))
-title:insert(display.newText("Finger", halfW, 180, fontType, 40))
+title:insert(display.newText("Crushes", halfW, 125, fontType, 80))
+title:insert(display.newText("Finger", halfW, 180, fontType, 80))
 
-local playBtn = display.newText("Tap to START!", halfW, 100, fontType, 20)
-local blickTimer = 0
+local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
+local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
 
-local blinkStartText = function()
-	if(playBtn.alpha < 1) then
-  	transition.to(playBtn, {time=490, alpha=1})
-	else 
-  	transition.to(playBtn, {time=490, alpha=0.1})
-  end
+local blinkText = function(btn, fn)
+	local callback  = function()
+		if(btn.alpha < 1) then
+	  	transition.to(btn, {time=100, alpha=1})
+		else 
+	  	transition.to(btn, {time=100, alpha=0.1})
+	  end
+	end
+
+  timer.performWithDelay(150, function() pcall(callback) end, 5)
+  timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 
-local startGame = function(event)
-	storyboard.gotoScene(scenesDir .. "level", "fade", 500 )
+local showLeaderboard = function(event)
+	local callback = function() 
+		gameNetwork.request("login",{
+	    userInitiated = true,
+	    listener = function() gameNetwork.show("leaderboards") end
+		});
+		playBtn.isVisible = true
+	end
+	playBtn.isVisible = false
+	blinkText(leaderboardBtn, callback)
 	return true
 end
 
-Runtime:addEventListener('tap', startGame)
+local startGame = function(event)
+	local callback = function()
+		storyboard.gotoScene(scenesDir .. "level", "slideUp", 500 ) 
+	end
+	leaderboardBtn.isVisible = false
+	blinkText(playBtn, callback)
+	return true
+end
+
+playBtn:addEventListener('tap', startGame)
+leaderboardBtn:addEventListener('tap', showLeaderboard)
 
 function scene:createScene( event )
-	ads:show()
 	local group = self.view
-
-	playBtn.x = display.contentWidth*0.5
-	playBtn.y = display.contentHeight - 125
-	blinkTimer = timer.performWithDelay(500, blinkStartText, 0)
 
 	group:insert(title)
 	group:insert(playBtn)
+	group:insert(leaderboardBtn)
 end
 
 function scene:enterScene( event )
@@ -50,8 +69,8 @@ function scene:exitScene( event )
 
 	title:removeSelf()
 
-	Runtime:removeEventListener('tap', startGame)
-	timer.cancel(blinkTimer)
+	playBtn:removeEventListener('tap', startGame)
+	leaderboardBtn:removeEventListener('tap', showLeaderboard)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

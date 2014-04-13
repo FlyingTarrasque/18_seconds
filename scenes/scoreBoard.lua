@@ -15,6 +15,15 @@ playAgain.alpha  = 0
 
 local blinkTimer
 
+local function submitScoreListener(event)
+	gameNetwork.request("setHighScore", {
+	  localPlayerScore = {
+	    category = leaderboardId, -- Id of the leaderboard to submit the score into
+	    value = thisGameScore -- The score to submit
+	  }
+	})
+end
+
 function playAgain:tap(event)
 	local options = {effect = "fade", time = 500}
 
@@ -34,7 +43,6 @@ end
 
 function scene:createScene(event)
 	local group = self.view 
-
 	thisGameScore = tonumber(event.params["thisGameScore"])
 	blinkTimer = timer.performWithDelay(500, function() pcall(blinkRestartText) end, 0)
 
@@ -50,6 +58,7 @@ end
 function scene:enterScene( event )
 	local group = self.view
 	ratePopup:show()
+	gameNetwork.show( "leaderboards" )
 
 	transition.to(finalScore, {time=200, alpha=1})
 
@@ -59,6 +68,15 @@ function scene:enterScene( event )
 	if(actualBestScore < thisGameScore) then
 		oldScores:store("best", thisGameScore)
 		oldScores:save()
+
+		local function postScoreSubmit( event )
+   		--whatever code you need following a score submission...
+   		return true
+		end
+		gameNetwork.request( "setHighScore", {
+   		localPlayerScore = { category=leaderboardId, value=thisGameScore },
+   		listener = postScoreSubmit
+		})
 
 		finalScore.text = "Best score now: " .. tostring(thisGameScore)
 	else
