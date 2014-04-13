@@ -199,7 +199,7 @@ end
 
 function scene:exitScene(event)
 	local group = self.view
-
+	finger:removeSelf()
 	removeEventListeners()
 	timer.performWithDelay(50, function() physics.stop() end, 1)
 end
