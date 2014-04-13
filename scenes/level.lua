@@ -3,7 +3,7 @@ local scene = storyboard.newScene()
 
 local physics = require "physics"
 --physics.setDrawMode("hybrid")
-local score = display.newText("0", halfW, display.screenOriginY + 30, fontType, 20)
+local score = display.newText("0", halfW, display.screenOriginY + 30, fontType, 50)
 local scoreTimer
 
 local gameEnded = false

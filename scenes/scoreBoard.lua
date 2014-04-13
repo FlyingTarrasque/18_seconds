@@ -3,13 +3,12 @@ local scene = storyboard.newScene()
 
 local oldScores = ice:loadBox("scores")
 
-local scoreGroup = display.newGroup()
 local thisGameScore = 0
 
 local finalScore = display.newText("", halfW, 110, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
-local submitScoreBtn  = display.newText("Submit this score?", halfW, halfH + 80, fontType, 40)
+local submitScoreBtn  = display.newText("Submit this score!", halfW, halfH + 80, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
 
 finalScore.alpha = 0
@@ -27,7 +26,7 @@ local blinkText = function(btn, fn)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 
-local submitScore = function(event)
+function submitScoreBtn:tap(event)
 	local callback = function()
 		local submitScore = function()
 			gameNetwork.request("setHighScore", {
@@ -52,7 +51,7 @@ local submitScore = function(event)
 	return true
 end
 
-local playAgain = function(event)
+function playAgainBtn:tap(event)
 	print("play again")
 	local callback = function()
 		local options = {effect = "fade", time = 500}
@@ -65,7 +64,7 @@ local playAgain = function(event)
 	return true
 end
 
-local showLeaderboard = function(event)
+function leaderboardBtn:tap(event)
 	local callback = function() 
 		local leaderboarListener = function() gameNetwork.show("leaderboards") end
 		if gameNetwork.request("isConnected") then
@@ -78,18 +77,19 @@ local showLeaderboard = function(event)
 		end
 		playBtn.isVisible = true
 	end
-
+	print("leaderboard")
 	blinkText(leaderboardBtn, callback)
 	return true
 end
 
-playAgainBtn:addEventListener('tap', playAgain)
-submitScoreBtn:addEventListener('tap', submitScore)
-leaderboardBtn:addEventListener('tap', showLeaderboard)
+playAgainBtn:addEventListener('tap', playAgainBtn)
+submitScoreBtn:addEventListener('tap', submitScoreBtn)
+leaderboardBtn:addEventListener('tap', leaderboardBtn)
 
 function scene:createScene(event)
 	local group = self.view 
 	thisGameScore = tonumber(event.params["thisGameScore"])
+	--playAgain()
 
 	group:insert(finalScore)
 	group:insert(lastScore)
@@ -134,7 +134,7 @@ end
 
 function scene:destroyScene( event )
 	local group = self.view
-	
+	--print("destroy")
 	playAgainBtn:removeEventListener('tap', playAgain)
 	submitScoreBtn:removeEventListener('tap', submitScore)
 	leaderboardBtn:removeEventListener('tap', showLeaderboard)
