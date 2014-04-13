@@ -29,10 +29,15 @@ end
 
 local showLeaderboard = function(event)
 	local callback = function() 
-		gameNetwork.request("login",{
-	    userInitiated = true,
-	    listener = function() gameNetwork.show("leaderboards") end
-		});
+		local leaderboarListener = function() gameNetwork.show("leaderboards") end
+		if gameNetwork.request("isConnected") then
+			leaderboarListener()
+		else
+			gameNetwork.request("login",{
+		    userInitiated = true,
+		    listener = leaderboarListener
+			});
+		end
 		playBtn.isVisible = true
 	end
 	playBtn.isVisible = false
