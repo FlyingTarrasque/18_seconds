@@ -28,6 +28,10 @@ local blinkText = function(btn, fn)
 end
 
 local showLeaderboard = function(event)
+	if leaderboardBtn.taped then
+		return true
+	end
+	leaderboardBtn.taped = true
 	local callback = function() 
 		local leaderboarListener = function() gameNetwork.show("leaderboards") end
 		if gameNetwork.request("isConnected") then
@@ -46,6 +50,10 @@ local showLeaderboard = function(event)
 end
 
 local startGame = function(event)
+	if playBtn.taped then
+		return true
+	end
+	playBtn.taped = true
 	local callback = function()
 		storyboard.gotoScene(scenesDir .. "level", "slideUp", 500 ) 
 	end

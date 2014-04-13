@@ -27,6 +27,10 @@ local blinkText = function(btn, fn)
 end
 
 function submitScoreBtn:tap(event)
+	if submitScoreBtn.taped then
+		return true
+	end
+	submitScoreBtn.taped = true
 	local callback = function()
 		local submitScore = function()
 			gameNetwork.request("setHighScore", {
@@ -52,7 +56,10 @@ function submitScoreBtn:tap(event)
 end
 
 function playAgainBtn:tap(event)
-	print("play again")
+	if playAgainBtn.taped then
+		return true
+	end
+	playAgainBtn.taped = true
 	local callback = function()
 		local options = {effect = "fade", time = 500}
 
@@ -65,6 +72,10 @@ function playAgainBtn:tap(event)
 end
 
 function leaderboardBtn:tap(event)
+	if leaderboardBtn.taped then
+		return true
+	end
+	leaderboardBtn.taped = true
 	local callback = function() 
 		local leaderboarListener = function() gameNetwork.show("leaderboards") end
 		if gameNetwork.request("isConnected") then
@@ -81,14 +92,13 @@ function leaderboardBtn:tap(event)
 	return true
 end
 
-playAgainBtn:addEventListener('tap', playAgainBtn)
-submitScoreBtn:addEventListener('tap', submitScoreBtn)
-leaderboardBtn:addEventListener('tap', leaderboardBtn)
-
 function scene:createScene(event)
 	local group = self.view 
 	thisGameScore = tonumber(event.params["thisGameScore"])
-	--playAgain()
+	
+	playAgainBtn:addEventListener('tap', playAgainBtn)
+	submitScoreBtn:addEventListener('tap', submitScoreBtn)
+	leaderboardBtn:addEventListener('tap', leaderboardBtn)
 
 	group:insert(finalScore)
 	group:insert(lastScore)
