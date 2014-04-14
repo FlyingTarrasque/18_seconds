@@ -9,6 +9,7 @@ local finalScore = display.newText("", halfW, 110, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 80, fontType, 40)
+leaderboardBtn.taped = false
 
 finalScore.alpha = 0
 
@@ -42,12 +43,12 @@ function playAgainBtn:tap(event)
 end
 
 function leaderboardBtn:tap(event)
-	if leaderboardBtn.taped then
+	if leaderboardBtn.taped == true then
 		return true
 	end
 	leaderboardBtn.taped = true
 	local callback = function() 
-		local enableButton = function() leaderboardBtn.taped = nil end
+		local enableButton = function() leaderboardBtn.taped = false end
 		local leaderboarListener = function() gameNetwork.show("leaderboards", {listener = enableButton }) end
 		if gameNetwork.request("isConnected") then
 			leaderboarListener()
@@ -58,7 +59,6 @@ function leaderboardBtn:tap(event)
 			});
 		end
 	end
-	print("leaderboard")
 	blinkText(leaderboardBtn, callback)
 	return true
 end
@@ -112,7 +112,7 @@ end
 
 function scene:destroyScene( event )
 	local group = self.view
-	print("destroy")
+
 	playAgainBtn:removeEventListener('tap', playAgainBtn)
 	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
 	

@@ -13,6 +13,7 @@ title:insert(display.newText("Finger", halfW, 180, fontType, 80))
 
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
+leaderboardBtn.taped = false
 
 local blinkText = function(btn, fn)
 	local callback  = function()
@@ -28,13 +29,13 @@ local blinkText = function(btn, fn)
 end
 
 local showLeaderboard = function(event)
-	if leaderboardBtn.taped then
+	if leaderboardBtn.taped == true then
 		return true
 	end
 	leaderboardBtn.taped = true
 	local callback = function() 
 		local enableButton = function() 
-			leaderboardBtn.taped = nil 
+			leaderboardBtn.taped = false 
 		end
 		local leaderboarListener = function() gameNetwork.show("leaderboards", {listener = enableButton }) end
 		if gameNetwork.request("isConnected") then
