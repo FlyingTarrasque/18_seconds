@@ -8,8 +8,7 @@ local thisGameScore = 0
 local finalScore = display.newText("", halfW, 110, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
-local submitScoreBtn  = display.newText("Submit this score!", halfW, halfH + 80, fontType, 40)
-local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
+local leaderboardBtn = display.newText("Highscores", halfW, halfH + 80, fontType, 40)
 
 finalScore.alpha = 0
 
@@ -24,35 +23,6 @@ local blinkText = function(btn, fn)
 
   timer.performWithDelay(150, function() pcall(callback) end, 6)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
-end
-
-function submitScoreBtn:tap(event)
-	if submitScoreBtn.taped then
-		return true
-	end
-	submitScoreBtn.taped = true
-	local callback = function()
-		local submitScore = function()
-			gameNetwork.request("setHighScore", {
-			  localPlayerScore = {
-			    category = leaderboardId, -- Id of the leaderboard to submit the score into
-			    value = thisGameScore -- The score to submit
-			  }
-			})
-		end
-
-		if gameNetwork.request("isConnected") then
-			submitScore()
-		else
-			gameNetwork.request("login",{
-		    userInitiated = true,
-		    listener = submitScore
-			});
-		end
-	end
-
-	blinkText(submitScoreBtn, callback)
-	return true
 end
 
 function playAgainBtn:tap(event)
@@ -97,14 +67,12 @@ function scene:createScene(event)
 	thisGameScore = tonumber(event.params["thisGameScore"])
 	
 	playAgainBtn:addEventListener('tap', playAgainBtn)
-	submitScoreBtn:addEventListener('tap', submitScoreBtn)
 	leaderboardBtn:addEventListener('tap', leaderboardBtn)
 
 	group:insert(finalScore)
 	group:insert(lastScore)
 	group:insert(playAgainBtn)
 	group:insert(leaderboardBtn)
-	group:insert(submitScoreBtn)
 end
 
 local function showMedal(group, actualBestScore, thisGameScore)
@@ -120,6 +88,13 @@ function scene:enterScene( event )
 	showMedal(group, actualBestScore, thisGameScore)
 	
 	if(actualBestScore < thisGameScore) then
+		gameNetwork.request("setHighScore", {
+		  localPlayerScore = {
+		    category = leaderboardId, -- Id of the leaderboard to submit the score into
+		    value = thisGameScore -- The score to submit
+		  }
+		})
+
 		oldScores:store("best", thisGameScore)
 		oldScores:save()
 
@@ -138,7 +113,6 @@ function scene:destroyScene( event )
 	local group = self.view
 	print("destroy")
 	playAgainBtn:removeEventListener('tap', playAgainBtn)
-	submitScoreBtn:removeEventListener('tap', submitScoreBtn)
 	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
 	
 	group:removeSelf()
