@@ -3,6 +3,7 @@ local scene = storyboard.newScene()
 
 local oldScores = ice:loadBox("scores")
 local store = "best" .. currentLvl
+local lvl = require("utils.lvlsConfig")
 
 local thisGameScore = 0
 
@@ -10,6 +11,7 @@ local finalScore = display.newText("", halfW, 110, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 80, fontType, 40)
+local menuBtn = display.newText("Menu Principal", halfW, halfH + 140, fontType, 40)
 leaderboardBtn.taped = false
 
 finalScore.alpha = 0
@@ -25,6 +27,20 @@ local blinkText = function(btn, fn)
 
   timer.performWithDelay(150, function() pcall(callback) end, 6)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
+end
+
+function menuBtn:tap(event)
+	if menuBtn.taped then
+		return true
+	end
+	menuBtn.taped = true
+	local callback = function()
+		storyboard.removeAll()
+		storyboard.gotoScene(scenesDir .. "menu", "fade", 500)
+	end
+
+	blinkText(menuBtn, callback)
+	return true
 end
 
 function playAgainBtn:tap(event)
@@ -70,11 +86,13 @@ function scene:createScene(event)
 	
 	playAgainBtn:addEventListener('tap', playAgainBtn)
 	leaderboardBtn:addEventListener('tap', leaderboardBtn)
+	menuBtn:addEventListener('tap', menuBtn)
 
 	group:insert(finalScore)
 	group:insert(lastScore)
 	group:insert(playAgainBtn)
 	group:insert(leaderboardBtn)
+	group:insert(menuBtn)
 end
 
 local function showMedal(group, actualBestScore, thisGameScore)
@@ -92,7 +110,7 @@ function scene:enterScene( event )
 	if(actualBestScore < thisGameScore) then
 		gameNetwork.request("setHighScore", {
 		  localPlayerScore = {
-		    category = leaderboardId, -- Id of the leaderboard to submit the score into
+		    category = lvl[currentLvl].leaderBoardId, -- Id of the leaderboard to submit the score into
 		    value = thisGameScore -- The score to submit
 		  }
 		})
@@ -116,6 +134,7 @@ function scene:destroyScene( event )
 
 	playAgainBtn:removeEventListener('tap', playAgainBtn)
 	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
+	menuBtn:removeEventListener('tap', menuBtn)
 	
 	group:removeSelf()
 end

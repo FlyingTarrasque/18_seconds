@@ -1,9 +1,6 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
-_G.title = display.newGroup()
-title:insert(display.newText("19 Sec.", halfW, 125, fontType, 80))
---title:insert(display.newText("Finger", halfW, 180, fontType, 80))
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
@@ -68,7 +65,8 @@ leaderboardBtn:addEventListener('tap', showLeaderboard)
 function scene:createScene( event )
 	local group = self.view
 
-	--group:insert(title)
+	_G.title = display.newText("18 Sec.", halfW, 125, fontType, 80)
+	
 	group:insert(playBtn)
 	group:insert(leaderboardBtn)
 end
