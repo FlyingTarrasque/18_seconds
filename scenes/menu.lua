@@ -1,15 +1,9 @@
------------------------------------------------------------------------------------------
---
--- menu.lua
---
------------------------------------------------------------------------------------------
-
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local title = display.newGroup()
-title:insert(display.newText("Crushes", halfW, 125, fontType, 80))
-title:insert(display.newText("Finger", halfW, 180, fontType, 80))
+title:insert(display.newText("19 Sec.", halfW, 125, fontType, 80))
+--title:insert(display.newText("Finger", halfW, 180, fontType, 80))
 
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
@@ -35,6 +29,7 @@ local showLeaderboard = function(event)
 	leaderboardBtn.taped = true
 	local callback = function() 
 		local enableButton = function() 
+			print("enabling...")
 			leaderboardBtn.taped = false 
 		end
 		local leaderboarListener = function() gameNetwork.show("leaderboards", {listener = enableButton }) end
@@ -57,6 +52,7 @@ local startGame = function(event)
 	if playBtn.taped then
 		return true
 	end
+	--storyboard.showOverlay( "pauseoverlay" ,{effect = "fade"  ,  params ={levelNum = "level01"}, isModal = true} )
 	playBtn.taped = true
 	local callback = function()
 		storyboard.gotoScene(scenesDir .. "level", "slideUp", 500 ) 

@@ -8,7 +8,11 @@ local scoreTimer
 local gameEnded = false
 local gameStarted = false
 
+local lvl = require("utils.lvlsConfig")
+
 local middleArea = display.newImage(imagesDir .. "middle_area.png", halfW, halfH, 375, 375)
+middleArea:scale(lvl[currentLvl].midleAreaScale, lvl[currentLvl].midleAreaScale)
+
 local largeHorizontalRect = display.newImage(imagesDir .. "largeHorizontalRect.png", 370, 380, 120, 25)
 local largeVerticalRect = display.newImage(imagesDir .. "largeVerticalRect.png", 120, 380, 30, 75)
 local fatRect = display.newImage(imagesDir .. "fatRect.png", 370, 110, 68, 50)
@@ -79,7 +83,9 @@ local function onTouchListener( event )
 		if "moved" == phase then
 			t.x = event.x - t.x0
 			t.y = event.y - t.y0
-			if (t.y > 418 or t.x > 418) or (t.y < 80 or t.x < 80) then
+			limitMax = lvl[currentLvl].limitMax
+			limitMin = lvl[currentLvl].limitMin
+			if (t.y > limitMax or t.x > limitMax) or (t.y < limitMin or t.x < limitMin) then
 				system.vibrate()
 				finishGame()
 			end
