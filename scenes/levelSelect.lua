@@ -1,15 +1,16 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
-_G.title = display.newGroup()
-title:insert(display.newText("19 Sec.", halfW, 125, fontType, 80))
---title:insert(display.newText("Finger", halfW, 180, fontType, 80))
-local menuPrincipal = display.newGroup()
-local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
-local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
-menuPrincipal:insert(playBtn)
-menuPrincipal:insert(leaderboardBtn)
-leaderboardBtn.taped = false
+local menuLvl = display.newGroup()
+local easy = display.newText("Easy", halfW, halfH + 80, fontType, 40)
+easy.name = 'easy'
+local normal = display.newText("Normal", halfW, halfH + 140, fontType, 40)
+normal.name = 'normal'
+local hard = display.newText("Hard", halfW, halfH + 200, fontType, 40)
+hard.name = 'hard'
+menuLvl:insert(easy)
+menuLvl:insert(normal)
+menuLvl:insert(hard)
 
 local blinkText = function(btn, fn)
 	local callback  = function()
@@ -24,53 +25,31 @@ local blinkText = function(btn, fn)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 
-local showLeaderboard = function(event)
-	if leaderboardBtn.taped == true then
-		return true
-	end
-	leaderboardBtn.taped = true
-	local callback = function() 
-		local enableButton = function() 
-			leaderboardBtn.taped = false 
-		end
-		local leaderboarListener = function() gameNetwork.show("leaderboards", {listener = enableButton }) end
-		if gameNetwork.request("isConnected") then
-			leaderboarListener()
-		else
-			gameNetwork.request("login",{
-		    userInitiated = true,
-		    listener = leaderboarListener
-			});
-		end
-		playBtn.isVisible = true
-	end
-	playBtn.isVisible = false
-	blinkText(leaderboardBtn, callback)
-	return true
-end
-
 local startGame = function(event)
-	if playBtn.taped then
+	local me = event.target
+
+	print(me.selected)
+	if me.selected then
 		return true
 	end
-
-	playBtn.taped = true
+	me.selected = true
+	
+	currentLvl = me.name
 	local callback = function()
-		storyboard.gotoScene(scenesDir .. "levelSelect", "slideLeft", 500 ) 
+		storyboard.gotoScene(scenesDir .. "level", "fade", 500 ) 
 	end
-	blinkText(playBtn, callback)
+	blinkText(me, callback)
 	return true
 end
 
-playBtn:addEventListener('tap', startGame)
-leaderboardBtn:addEventListener('tap', showLeaderboard)
+easy:addEventListener('tap', startGame)
+normal:addEventListener('tap', startGame)
+hard:addEventListener('tap', startGame)
 
 function scene:createScene( event )
 	local group = self.view
 
-	--group:insert(title)
-	group:insert(playBtn)
-	group:insert(leaderboardBtn)
+	group:insert(menuLvl)
 end
 
 function scene:enterScene( event )
@@ -80,8 +59,12 @@ end
 function scene:exitScene( event )
 	local group = self.view
 
-	playBtn:removeEventListener('tap', startGame)
-	leaderboardBtn:removeEventListener('tap', showLeaderboard)
+	menuLvl:removeSelf()
+	title:removeSelf()
+
+	easy:removeEventListener('tap', startGame)
+	normal:removeEventListener('tap', startGame)
+	hard:removeEventListener('tap', startGame)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
