@@ -12,6 +12,15 @@ menuLvl:insert(easy)
 menuLvl:insert(normal)
 menuLvl:insert(hard)
 
+normal.alpha = 0.5
+hard.alpha = 0.5
+
+local oldScores = ice:loadBox("scores")
+
+local function getScore(lvl)
+	return oldScores:retrieve("best" .. lvl) or 0
+end
+
 local blinkText = function(btn, fn)
 	local callback  = function()
 		if(btn.alpha < 1) then
@@ -43,11 +52,17 @@ local startGame = function(event)
 end
 
 easy:addEventListener('tap', startGame)
-normal:addEventListener('tap', startGame)
-hard:addEventListener('tap', startGame)
 
 function scene:createScene( event )
 	local group = self.view
+
+	if(getScore("easy") >= 18) then
+		normal:addEventListener('tap', startGame)
+		normal.alpha = 1
+	elseif (getScore("normal") >= 18) then
+		hard:addEventListener('tap', startGame)
+		hard.alpha = 1
+	end
 
 	group:insert(menuLvl)
 end

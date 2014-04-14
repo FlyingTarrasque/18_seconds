@@ -2,6 +2,7 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local oldScores = ice:loadBox("scores")
+local store = "best" .. currentLvl
 
 local thisGameScore = 0
 
@@ -85,7 +86,7 @@ function scene:enterScene( event )
 	ratePopup:show()
 	transition.to(finalScore, {time=200, alpha=1})
 
-	local actualBestScore = oldScores:retrieve("best") or 0
+	local actualBestScore = oldScores:retrieve(store) or 0
 	showMedal(group, actualBestScore, thisGameScore)
 	
 	if(actualBestScore < thisGameScore) then
@@ -96,7 +97,7 @@ function scene:enterScene( event )
 		  }
 		})
 
-		oldScores:store("best", thisGameScore)
+		oldScores:store(store, thisGameScore)
 		oldScores:save()
 
 		finalScore.text = "Best score now: " .. tostring(thisGameScore)
