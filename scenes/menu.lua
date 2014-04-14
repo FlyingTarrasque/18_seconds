@@ -34,8 +34,7 @@ local showLeaderboard = function(event)
 	leaderboardBtn.taped = true
 	local callback = function() 
 		local enableButton = function() 
-			print("blastoise")
-			leaderboardBtn.taped = false 
+			leaderboardBtn.taped = nil 
 		end
 		local leaderboarListener = function() gameNetwork.show("leaderboards", {listener = enableButton }) end
 		if gameNetwork.request("isConnected") then
