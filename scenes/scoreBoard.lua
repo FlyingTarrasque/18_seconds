@@ -65,8 +65,10 @@ function leaderboardBtn:tap(event)
 	end
 	leaderboardBtn.taped = true
 	local callback = function() 
-		local enableButton = function() leaderboardBtn.taped = false end
-		local leaderboarListener = function() gameNetwork.show("leaderboards", {listener = enableButton }) end
+		onSuspending = function()
+			leaderboardBtn.taped = false 
+		end
+		local leaderboarListener = function() gameNetwork.show("leaderboards") end
 		if gameNetwork.request("isConnected") then
 			leaderboarListener()
 		else

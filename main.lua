@@ -17,12 +17,18 @@ require("utils.ice")
 require("utils.gameNetwork")
 require("utils.ratePopup")
 
+local storyboard = require "storyboard"
+_G.onSuspending = nil
 local function systemEvents( event )
    print("systemEvent " .. event.type)
    if ( event.type == "applicationSuspend" ) then
       print( "suspending..........................." )
    elseif ( event.type == "applicationResume" ) then
-      print( "resuming............................." )
+      if(onSuspending)then
+         onSuspending()
+         onSuspending = nil
+      end
+      storyboard.removeAll()
    elseif ( event.type == "applicationExit" ) then
       print( "exiting.............................." )
    elseif ( event.type == "applicationStart" ) then
@@ -31,9 +37,6 @@ local function systemEvents( event )
    return true
 end
 Runtime:addEventListener( "system", systemEvents )
-
--- include the Corona "storyboard" module
-local storyboard = require "storyboard"
 
 -- load menu screen
 storyboard.gotoScene(scenesDir .. "menu")

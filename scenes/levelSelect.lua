@@ -37,7 +37,6 @@ end
 local startGame = function(event)
 	local me = event.target
 
-	print(me.selected)
 	if me.selected then
 		return true
 	end
