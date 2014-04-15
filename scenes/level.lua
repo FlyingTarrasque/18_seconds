@@ -32,6 +32,8 @@ local function blinkFingerPosition()
 end
 
 local fingerPointTimer = timer.performWithDelay(500, function() pcall(blinkFingerPosition) end, 0)
+local timeCountSeconds
+local timeCountMilliseconds
 
 left = display.newLine(0, screenH, 0, 0)
 right = display.newLine(screenW, screenH, screenW + 2, 0)
@@ -43,15 +45,24 @@ left.isVisible = false
 right.isVisible = false
 bottom.isVisible = false
 
-local function countTime(event)
-	score.text = tonumber(score.text or "0") + 0.01
+local seconds = 0
+local function count1Seconds(event)
+	seconds = seconds + 1
+	milliseconds = 0
+end
+
+local milliseconds = 0
+local function count71Milliseconnds(event)
+	milliseconds = milliseconds + 0.071
+	milliseconds = milliseconds % 1 --garantir que nao vai somar 1 segundo.
+	score.text = seconds + milliseconds
 end
 
 local function finishGame()
 	if(gameEnded == true)then
 		return true
 	end
-	Runtime:removeEventListener( "enterFrame", countTime )
+
 	gameEnded = true
 
 	local options = {
@@ -182,7 +193,10 @@ function startGame()
 	move(fatRect)
 	move(largeVerticalRect)
 	move(largeHorizontalRect)
-	Runtime:addEventListener( "enterFrame", countTime )
+	
+	timeCountSeconds = timer.performWithDelay( 1000, count1Seconds , 0 )
+	timeCountMilliseconds = timer.performWithDelay( 71, count71Milliseconnds , 0 )
+
 	timer.cancel(fingerPointTimer)
 	finger.isVisible = false
 
