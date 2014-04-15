@@ -168,7 +168,7 @@ function move(obj)
 	while (direcaoY == 0) do
 		direcaoY = math.random(-1,1)
 	end
-	obj:setLinearVelocity(200 * direcaoX, 500 * direcaoY)
+	obj:setLinearVelocity(lvl[currentLvl].velocityx * direcaoX, lvl[currentLvl].velocityy * direcaoY)
 end
 
 local function onCollision( event )

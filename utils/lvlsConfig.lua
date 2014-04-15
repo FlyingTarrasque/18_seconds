@@ -1,7 +1,18 @@
 local lvl = {}
-lvl["easy"] = {midleAreaScale = 1.4, limitMax = 500, limitMin = 0, leaderBoardId = "CgkI5v67ttYBEAIQBQ"}
-lvl["normal"] = {midleAreaScale = 1, limitMax = 432, limitMin = 69, leaderBoardId = "CgkI5v67ttYBEAIQBA"}
-lvl["hard"] = {midleAreaScale = 0.8, limitMax = 385, limitMin = 108, leaderBoardId = "CgkI5v67ttYBEAIQAA"}
-lvl["impossible"] = {midleAreaScale = 1, bounce = 1.3}
+
+local function configLvl(name, midleAreaScale, limitMax, limitMin, velocityx, velocityy, leaderBoardId)
+	lvl[name] = {
+		midleAreaScale = midleAreaScale,
+		limitMax = limitMax,
+		limitMin = limitMin,
+		leaderBoardId = leaderBoardId,
+		velocityy = velocityy,
+		velocityx = velocityx
+	}
+end
+
+configLvl("easy", 1.4, 500, 0, 400, 100, "CgkI5v67ttYBEAIQBQ")
+configLvl("normal", 1, 432, 69, 400, 100, "CgkI5v67ttYBEAIQBA")
+configLvl("hard", 1, 432, 69, 500, 200, "CgkI5v67ttYBEAIQAA")
 
 return lvl
