@@ -7,7 +7,7 @@ local lvl = require("utils.lvlsConfig")
 
 local thisGameScore = 0
 
-local finalScore = display.newText("", halfW, 110, fontType, 70)
+local finalScore = display.newText("", halfW, 70, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
 local leaderboardBtn = display.newText("Highscores", halfW, halfH + 80, fontType, 40)
@@ -117,11 +117,11 @@ function scene:enterScene( event )
 
 		oldScores:store(store, thisGameScore)
 		oldScores:save()
-
-		finalScore.text = "Best score now: " .. tostring(thisGameScore)
+		finalScore.text = "New Best Score!"
+		lastScore.text = tostring(thisGameScore)
 	else
-		lastScore.text  = "Score: " .. tostring(thisGameScore)
-		finalScore.text = "Best score: " .. tostring(actualBestScore)
+		lastScore.text  = "Actual: "..tostring(thisGameScore)
+		finalScore.text = "Best: "..tostring(actualBestScore)
 	end	
 end
 

@@ -63,6 +63,9 @@ local function finishGame()
 		return true
 	end
 
+	timer.cancel(timeCountMilliseconds)
+	timer.cancel(timeCountSeconds)
+
 	gameEnded = true
 
 	local options = {
