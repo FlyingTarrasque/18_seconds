@@ -108,12 +108,12 @@ function scene:enterScene( event )
 
 	local actualBestScore = oldScores:retrieve(store) or 0
 	showMedal(group, actualBestScore, thisGameScore)
-	
+
 	if(actualBestScore < thisGameScore) then
 		gameNetwork.request("setHighScore", {
 		  localPlayerScore = {
 		    category = lvl[currentLvl].leaderBoardId, -- Id of the leaderboard to submit the score into
-		    value = thisGameScore -- The score to submit
+		    value = thisGameScore * 1000 -- The score to submit
 		  }
 		})
 
