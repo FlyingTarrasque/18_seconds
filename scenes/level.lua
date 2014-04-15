@@ -18,7 +18,7 @@ local largeVerticalRect = display.newImage(imagesDir .. "largeVerticalRect.png",
 local fatRect = display.newImage(imagesDir .. "fatRect.png", 370, 110, 68, 50)
 local square = display.newImage(imagesDir .. "square.png", 120, 110, 57, 57)
 
-local finger = display.newCircle( halfW, halfH, 20 )
+local finger = display.newCircle( halfW, halfH, 15 )
 finger.alpha = 0
 finger:setFillColor( 255,0,0 )
 finger.name = "finger"
@@ -93,8 +93,7 @@ local function onTouchListener( event )
 
 		t.x0 = event.x - t.x
 		t.y0 = event.y - t.y
-	elseif t.isFocus then
-		if "moved" == phase then
+	elseif "moved" == phase then
 			t.x = event.x - t.x0
 			t.y = event.y - t.y0
 			limitMax = lvl[currentLvl].limitMax
@@ -107,7 +106,6 @@ local function onTouchListener( event )
 			display.getCurrentStage():setFocus( t, nil )
 			t.isFocus = false
 			finishGame()
-		end
 	end
 	return true
 end
@@ -199,9 +197,8 @@ function startGame()
 	
 	timeCountSeconds = timer.performWithDelay( 1000, count1Seconds , 0 )
 	timeCountMilliseconds = timer.performWithDelay( 71, count71Milliseconnds , 0 )
-
 	timer.cancel(fingerPointTimer)
-	finger.alpha = 0
+	finger.isVisible = false
 
 	gameStarted = true
 end	
