@@ -120,7 +120,7 @@ function scene:enterScene( event )
 		finalScore.text = "New Best Score!"
 		lastScore.text = tostring(thisGameScore)
 	else
-		lastScore.text  = "Actual: "..tostring(thisGameScore)
+		lastScore.text  = "Score: "..tostring(thisGameScore)
 		finalScore.text = "Best: "..tostring(actualBestScore)
 	end	
 end
