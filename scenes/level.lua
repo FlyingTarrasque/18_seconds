@@ -201,7 +201,7 @@ function startGame()
 	timeCountMilliseconds = timer.performWithDelay( 71, count71Milliseconnds , 0 )
 
 	timer.cancel(fingerPointTimer)
-	finger.isVisible = false
+	finger.alpha = 0
 
 	gameStarted = true
 end	
