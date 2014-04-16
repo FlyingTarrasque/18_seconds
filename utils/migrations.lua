@@ -7,7 +7,7 @@ migrations[1] = function()
 
 		local setHighScore = function(name)
 			local score = scores:retrieve("best" .. name) or 0
-			if score > 0 then
+			if score == 0 then
 				return false
 			end
 
