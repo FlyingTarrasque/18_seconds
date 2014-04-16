@@ -10,7 +10,7 @@ local thisGameScore = 0
 local finalScore = display.newText("", halfW, 70, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
-local leaderboardBtn = display.newText("Highscores", halfW, halfH + 80, fontType, 40)
+local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 80, fontType, 40)
 local menuBtn = display.newText("Menu Principal", halfW, halfH + 140, fontType, 40)
 leaderboardBtn.taped = false
 
@@ -110,12 +110,22 @@ function scene:enterScene( event )
 	showMedal(group, actualBestScore, thisGameScore)
 
 	if(actualBestScore < thisGameScore) then
-		gameNetwork.request("setHighScore", {
-		  localPlayerScore = {
-		    category = lvl[currentLvl].leaderBoardId, -- Id of the leaderboard to submit the score into
-		    value = thisGameScore * 1000 -- The score to submit
-		  }
-		})
+		local leaderboarListener = function() 
+			gameNetwork.request("setHighScore", {
+			  localPlayerScore = {
+			    category = lvl[currentLvl].leaderBoardId,
+			    value = thisGameScore * 1000
+			  }
+			})
+	  end
+		if gameNetwork.request("isConnected") then
+			leaderboarListener()
+		else
+			gameNetwork.request("login",{
+		    userInitiated = true,
+		    listener = leaderboarListener
+			});
+		end
 
 		oldScores:store(store, thisGameScore)
 		oldScores:save()

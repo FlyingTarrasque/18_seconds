@@ -3,7 +3,7 @@ local scene = storyboard.newScene()
 
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
-local leaderboardBtn = display.newText("Highscores", halfW, halfH + 140, fontType, 40)
+local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
 menuPrincipal:insert(playBtn)
 menuPrincipal:insert(leaderboardBtn)
 leaderboardBtn.taped = false

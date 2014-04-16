@@ -16,6 +16,7 @@ require("utils.ads")
 require("utils.ice")
 require("utils.gameNetwork")
 require("utils.ratePopup")
+local migrations = require("utils.migrations")
 
 local storyboard = require "storyboard"
 _G.onSuspending = nil
@@ -32,6 +33,8 @@ local function systemEvents( event )
    elseif ( event.type == "applicationExit" ) then
       print( "exiting.............................." )
    elseif ( event.type == "applicationStart" ) then
+      local migrations = require("utils.migrations")
+      migrations()
       ads:show()  --login to the network here
    end
    return true
