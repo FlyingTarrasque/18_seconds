@@ -11,7 +11,7 @@ local function configLvl(name, midleAreaScale, limitMax, limitMin, velocityx, ve
 	}
 end
 
-configLvl("easy", 1.4, 500, 0, 400, 160, "CgkI5v67ttYBEAIQBQ")
+configLvl("easy", 1.4, 500, 0, 400, 100, "CgkI5v67ttYBEAIQBQ")
 configLvl("normal", 1, 432, 69, 400, 160, "CgkI5v67ttYBEAIQBA")
 configLvl("hard", 1, 432, 69, 500, 200, "CgkI5v67ttYBEAIQAA")
 
