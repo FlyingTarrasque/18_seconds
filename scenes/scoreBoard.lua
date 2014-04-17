@@ -10,9 +10,9 @@ local thisGameScore = 0
 local finalScore = display.newText("", halfW, 70, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
-local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 80, fontType, 40)
+--local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 80, fontType, 40)
 local menuBtn = display.newText("Menu Principal", halfW, halfH + 140, fontType, 40)
-leaderboardBtn.taped = false
+--leaderboardBtn.taped = false
 
 finalScore.alpha = 0
 
@@ -59,41 +59,41 @@ function playAgainBtn:tap(event)
 	return true
 end
 
-function leaderboardBtn:tap(event)
-	if leaderboardBtn.taped == true then
-		return true
-	end
-	leaderboardBtn.taped = true
-	local callback = function() 
-		onSuspending = function()
-			leaderboardBtn.taped = false 
-		end
-		local leaderboarListener = function() gameNetwork.show("leaderboards") end
-		if gameNetwork.request("isConnected") then
-			leaderboarListener()
-		else
-			gameNetwork.request("login",{
-		    userInitiated = true,
-		    listener = leaderboarListener
-			});
-		end
-	end
-	blinkText(leaderboardBtn, callback)
-	return true
-end
+--function leaderboardBtn:tap(event)
+--	if leaderboardBtn.taped == true then
+--		return true
+--	end
+--	leaderboardBtn.taped = true
+--	local callback = function() 
+--		onSuspending = function()
+--			leaderboardBtn.taped = false 
+--		end
+--		local leaderboarListener = function() gameNetwork.show("leaderboards") end
+--		if gameNetwork.request("isConnected") then
+--			leaderboarListener()
+--		else
+--			gameNetwork.request("login",{
+--		    userInitiated = true,
+--		    listener = leaderboarListener
+--			});
+--		end
+--	end
+--	blinkText(leaderboardBtn, callback)
+--	return true
+--end
 
 function scene:createScene(event)
 	local group = self.view 
 	thisGameScore = tonumber(event.params["thisGameScore"])
 	
 	playAgainBtn:addEventListener('tap', playAgainBtn)
-	leaderboardBtn:addEventListener('tap', leaderboardBtn)
+	--leaderboardBtn:addEventListener('tap', leaderboardBtn)
 	menuBtn:addEventListener('tap', menuBtn)
 
 	group:insert(finalScore)
 	group:insert(lastScore)
 	group:insert(playAgainBtn)
-	group:insert(leaderboardBtn)
+	--group:insert(leaderboardBtn)
 	group:insert(menuBtn)
 end
 
@@ -110,22 +110,22 @@ function scene:enterScene( event )
 	showMedal(group, actualBestScore, thisGameScore)
 
 	if(actualBestScore < thisGameScore) then
-		local leaderboarListener = function() 
-			gameNetwork.request("setHighScore", {
-			  localPlayerScore = {
-			    category = lvl[currentLvl].leaderBoardId,
-			    value = thisGameScore * 1000
-			  }
-			})
-	  end
-		if gameNetwork.request("isConnected") then
-			leaderboarListener()
-		else
-			gameNetwork.request("login",{
-		    userInitiated = true,
-		    listener = leaderboarListener
-			});
-		end
+		--local leaderboarListener = function() 
+		--	gameNetwork.request("setHighScore", {
+		--	  localPlayerScore = {
+		--	    category = lvl[currentLvl].leaderBoardId,
+		--	    value = thisGameScore * 1000
+		--	  }
+		--	})
+	  	--end
+		--if gameNetwork.request("isConnected") then
+		--	leaderboarListener()
+		--else
+		--	gameNetwork.request("login",{
+		--  userInitiated = true,
+		--    listener = leaderboarListener
+		--	});
+		--end
 
 		oldScores:store(store, thisGameScore)
 		oldScores:save()
@@ -145,7 +145,7 @@ function scene:destroyScene( event )
 	local group = self.view
 
 	playAgainBtn:removeEventListener('tap', playAgainBtn)
-	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
+	--leaderboardBtn:removeEventListener('tap', leaderboardBtn)
 	menuBtn:removeEventListener('tap', menuBtn)
 	
 	group:removeSelf()

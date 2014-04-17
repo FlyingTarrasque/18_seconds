@@ -7,31 +7,30 @@ settings = {
 		supported = { "portrait", "portraitUpsideDown" }
 	},
 	android = {
-    googlePlayGamesAppId = "57559416678" -- Your Google Play Games App Id
-  },
+    	googlePlayGamesAppId = "57559416678" -- Your Google Play Games App Id
+  	},
 	plugins = {
 		["CoronaProvider.ads.admob"] = {
 			publisherId = "com.coronalabs",
 			supportedPlatforms = { iphone = true, android = true }
-		},
-		["CoronaProvider.gameNetwork.google"] = {
-        -- required
-        publisherId = "com.coronalabs",
-    }
+		}
 	},
 	
 	iphone = {
 		plist = {
 			UIStatusBarHidden = true,
-			CFBundleDisplayName = "Crushes Finger",
+			CFBundleDisplayName = "18 Sec",
 			UIAppFonts = {
-				"8BIT WONDER.ttf"
-      },
-      CFBundleIconFile = "Icon.png",
+				"8-bit.ttf"
+     	},
+      	CFBundleIconFile = "Icon.png",
 			CFBundleIconFiles = {
 				"Icon.png", 
 				"Icon@2x.png", 
 				"Icon-72.png", 
+				"Icon-76.png",
+				"Icon-120.png",
+				"Icon-152.png"
 			}
 		}
 	},

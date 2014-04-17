@@ -3,10 +3,10 @@ local scene = storyboard.newScene()
 
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
-local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
+--local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
 menuPrincipal:insert(playBtn)
-menuPrincipal:insert(leaderboardBtn)
-leaderboardBtn.taped = false
+--menuPrincipal:insert(leaderboardBtn)
+--leaderboardBtn.taped = false
 
 local blinkText = function(btn, fn)
 	local callback  = function()
@@ -38,7 +38,7 @@ local showLeaderboard = function(event)
 		else
 			gameNetwork.request("login",{
 		    userInitiated = true,
-		    listener = leaderboarListener
+			    listener = leaderboarListener
 			});
 		end
 		playBtn.isVisible = true
@@ -62,7 +62,7 @@ local startGame = function(event)
 end
 
 playBtn:addEventListener('tap', startGame)
-leaderboardBtn:addEventListener('tap', showLeaderboard)
+--leaderboardBtn:addEventListener('tap', showLeaderboard)
 
 function scene:createScene( event )
 	local group = self.view
@@ -70,7 +70,7 @@ function scene:createScene( event )
 	_G.title = display.newText("18 Sec.", halfW, 125, fontType, 80)
 	
 	group:insert(playBtn)
-	group:insert(leaderboardBtn)
+	--group:insert(leaderboardBtn)
 end
 
 function scene:enterScene( event )
@@ -81,7 +81,7 @@ function scene:exitScene( event )
 	local group = self.view
 
 	playBtn:removeEventListener('tap', startGame)
-	leaderboardBtn:removeEventListener('tap', showLeaderboard)
+	--leaderboardBtn:removeEventListener('tap', showLeaderboard)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:

@@ -14,7 +14,7 @@ background.anchorX, background.anchorY = 0, 0
 background.x, background.y = display.screenOriginX, display.screenOriginY
 require("utils.ads")
 require("utils.ice")
-require("utils.gameNetwork")
+--require("utils.gameNetwork")
 require("utils.ratePopup")
 local migrations = require("utils.migrations")
 
