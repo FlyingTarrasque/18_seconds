@@ -11,7 +11,7 @@ local finalScore = display.newText("", halfW, 70, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
 local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 80, fontType, 40)
-local menuBtn = display.newText("Menu Principal", halfW, halfH + 140, fontType, 40)
+local levelSelectBtn = display.newText("Level Select", halfW, halfH + 140, fontType, 40)
 leaderboardBtn.taped = false
 
 finalScore.alpha = 0
@@ -29,17 +29,17 @@ local blinkText = function(btn, fn)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 
-function menuBtn:tap(event)
-	if menuBtn.taped then
+function levelSelectBtn:tap(event)
+	if levelSelectBtn.taped then
 		return true
 	end
-	menuBtn.taped = true
+	levelSelectBtn.taped = true
 	local callback = function()
 		storyboard.removeAll()
-		storyboard.gotoScene(scenesDir .. "menu", "fade", 500)
+		storyboard.gotoScene(scenesDir .. "levelSelect", "fade", 500)
 	end
 
-	blinkText(menuBtn, callback)
+	blinkText(levelSelectBtn, callback)
 	return true
 end
 
@@ -88,13 +88,13 @@ function scene:createScene(event)
 	
 	playAgainBtn:addEventListener('tap', playAgainBtn)
 	leaderboardBtn:addEventListener('tap', leaderboardBtn)
-	menuBtn:addEventListener('tap', menuBtn)
+	levelSelectBtn:addEventListener('tap', levelSelectBtn)
 
 	group:insert(finalScore)
 	group:insert(lastScore)
 	group:insert(playAgainBtn)
 	group:insert(leaderboardBtn)
-	group:insert(menuBtn)
+	group:insert(levelSelectBtn)
 end
 
 local function showMedal(group, actualBestScore, thisGameScore)
@@ -146,7 +146,7 @@ function scene:destroyScene( event )
 
 	playAgainBtn:removeEventListener('tap', playAgainBtn)
 	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
-	menuBtn:removeEventListener('tap', menuBtn)
+	levelSelectBtn:removeEventListener('tap', levelSelectBtn)
 	
 	group:removeSelf()
 end

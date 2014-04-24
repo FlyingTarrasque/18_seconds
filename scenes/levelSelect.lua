@@ -58,7 +58,8 @@ function scene:createScene( event )
 	if(getScore("easy") >= 18) then
 		normal:addEventListener('tap', startGame)
 		normal.alpha = 1
-	elseif (getScore("normal") >= 18) then
+	end
+	if (getScore("normal") >= 18) then
 		hard:addEventListener('tap', startGame)
 		hard.alpha = 1
 	end
