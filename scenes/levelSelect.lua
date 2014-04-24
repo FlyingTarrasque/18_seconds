@@ -54,6 +54,10 @@ easy:addEventListener('tap', startGame)
 
 function scene:createScene( event )
 	local group = self.view
+	print(title)
+	if title == nil then
+		title = display.newText("18 Sec.", halfW, 125, fontType, 80)
+	end
 
 	if(getScore("easy") >= 18) then
 		normal:addEventListener('tap', startGame)
@@ -76,6 +80,7 @@ function scene:exitScene( event )
 
 	menuLvl:removeSelf()
 	title:removeSelf()
+	title = nil
 
 	easy:removeEventListener('tap', startGame)
 	normal:removeEventListener('tap', startGame)
