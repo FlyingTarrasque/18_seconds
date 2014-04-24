@@ -4,6 +4,7 @@ local scene = storyboard.newScene()
 local oldScores = ice:loadBox("scores")
 local store = "best" .. currentLvl
 local lvl = require("utils.lvlsConfig")
+local gameNetwork = require("utils.gameNetwork")
 
 local thisGameScore = 0
 
@@ -64,20 +65,7 @@ function leaderboardBtn:tap(event)
 		return true
 	end
 	leaderboardBtn.taped = true
-	local callback = function() 
-		onSuspending = function()
-			leaderboardBtn.taped = false 
-		end
-		local leaderboarListener = function() gameNetwork.show("leaderboards") end
-		if gameNetwork.request("isConnected") then
-			leaderboarListener()
-		else
-			gameNetwork.request("login",{
-		    userInitiated = true,
-		    listener = leaderboarListener
-			});
-		end
-	end
+	local callback = function() gameNetwork:showLeaderboard() end
 	blinkText(leaderboardBtn, callback)
 	return true
 end
@@ -110,22 +98,7 @@ function scene:enterScene( event )
 	showMedal(group, actualBestScore, thisGameScore)
 
 	if(actualBestScore < thisGameScore) then
-		local leaderboarListener = function() 
-			gameNetwork.request("setHighScore", {
-			  localPlayerScore = {
-			    category = lvl[currentLvl].leaderBoardId,
-			    value = thisGameScore * 1000
-			  }
-			})
-	  end
-		if gameNetwork.request("isConnected") then
-			leaderboarListener()
-		else
-			gameNetwork.request("login",{
-		    userInitiated = true,
-		    listener = leaderboarListener
-			});
-		end
+		gameNetwork:setHighScore(thisGameScore,lvl)
 
 		oldScores:store(store, thisGameScore)
 		oldScores:save()

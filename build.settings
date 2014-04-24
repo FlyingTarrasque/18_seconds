@@ -14,24 +14,27 @@ settings = {
 			publisherId = "com.coronalabs",
 			supportedPlatforms = { iphone = true, android = true }
 		},
-		["CoronaProvider.gameNetwork.google"] = {
+		--["CoronaProvider.gameNetwork"] = {
         -- required
-        publisherId = "com.coronalabs",
-    }
+        --publisherId = "com.coronalabs",
+    	--}
 	},
 	
 	iphone = {
 		plist = {
 			UIStatusBarHidden = true,
-			CFBundleDisplayName = "Crushes Finger",
+			CFBundleDisplayName = "18 Sec",
 			UIAppFonts = {
-				"8BIT WONDER.ttf"
+				"8-bit.ttf"
       },
       CFBundleIconFile = "Icon.png",
 			CFBundleIconFiles = {
 				"Icon.png", 
 				"Icon@2x.png", 
 				"Icon-72.png", 
+				"Icon-76.png",
+				"Icon-120.png",
+				"Icon-152.png"
 			}
 		}
 	},
