@@ -4,19 +4,15 @@ local loggedIntoGC = false
 
 local isAndroid = system.getInfo("platformName") == "Android"
 
--- called after the "init" request has completed
-local function initCallback( event )
-    if event.data then
-        loggedIntoGC = true
-        native.showAlert( "Success!", "User has logged into Game Center", { "OK" } )
-    else
-        loggedIntoGC = false
-        native.showAlert( "Fail", "User is not logged into Game Center", { "OK" } )
-    end
+GameNetwork = {}
+
+local function alerta(str, callback)
+	--local alert = native.showAlert( str, "...", { "OK", "callback" }, callback)
 end
 
 -- function to listen for system events
 local function onSystemEvent( event ) 
+	
 	local initCallback =  function(event)
 			-- "showSignIn" is only available on iOS 6+
 	    if event.type == "showSignIn" then
@@ -25,26 +21,30 @@ local function onSystemEvent( event )
 	        -- This is type "init" for all versions of Game Center.
 	    elseif event.data then
 	        loggedIntoGC = true
-	        native.showAlert( "Success!", "", { "OK" } )
 	    end
+	    --alerta("initCallback event.type: "..event.type.."event.data: "..event.data)
 	end
     if event.type == "applicationStart" then
-        gameNetwork.init( "gamecenter", initCallback )
+    	local callbackIniciarGameCenter = function()
+    		gameNetwork.init( "gamecenter", initCallback )
+   		end
+    	--alerta(event.type, callbackIniciarGameCenter)
         return true
     end
 end
 
-if ( isAndroid ) then
-	gameNetwork.init("google")
+local function iniciarGameNetwork()
+	if ( isAndroid ) then
+		gameNetwork.init("google")
 
-	gameNetwork.request("login",{
-   		userInitiated = false
-	})
-else
-	Runtime:addEventListener( "system", onSystemEvent )
-end
+		gameNetwork.request("login",{
+	   		userInitiated = false
+		})
+	else
+		Runtime:addEventListener( "system", onSystemEvent )
+	end
 
-GameNetwork = {}
+end	
 
 function GameNetwork:setHighScore(score, lvl) 
 	if(isAndroid) then
@@ -87,5 +87,7 @@ function GameNetwork:showLeaderboard()
 		gameNetwork.request("loadScores")
 	end
 end
+
+iniciarGameNetwork();
 
 _G.gameNetwork = gameNetwork

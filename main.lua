@@ -14,9 +14,11 @@ background.anchorX, background.anchorY = 0, 0
 background.x, background.y = display.screenOriginX, display.screenOriginY
 require("utils.ads")
 require("utils.ice")
-require("utils.gameNetwork")
 require("utils.ratePopup")
 local migrations = require("utils.migrations")
+
+-- GameNetwork
+local gameNetwork = require("utils.gameNetwork")
 
 local storyboard = require "storyboard"
 _G.onSuspending = nil
@@ -41,5 +43,7 @@ local function systemEvents( event )
 end
 Runtime:addEventListener( "system", systemEvents )
 
--- load menu screen
+
+
+--load menu screen
 storyboard.gotoScene(scenesDir .. "menu")
