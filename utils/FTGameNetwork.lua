@@ -2,8 +2,8 @@
 
 local loggedIntoGC = false
 
-local FTGameNetwork = {}
-local FTGameNetwork_mt = { __index = FTGameNetwork }
+FTGameNetwork = {}
+FTGameNetwork_mt = { __index = FTGameNetwork }
 
 local gameNetwork = require "gameNetwork"
 
@@ -14,23 +14,6 @@ function FTGameNetwork:new()
 	setmetatable(self, FTGameNetwork_mt)
 	return self
 end
-
-function FTGameNetwork:init()
-	print("init.......")
-	if ( self.isAndroid ) then
-		gameNetwork.init("google")
-
-		gameNetwork.request("login",{
-	   		userInitiated = false
-		})
-	else
-		Runtime:addEventListener( "system", onSystemEvent )
-	end
-	
-
-	print("gameNetwork iniciado")
-
-end	
 
 -- function to listen for system events
 local function onSystemEvent( event ) 
@@ -51,6 +34,23 @@ local function onSystemEvent( event )
         return true
     end
 end
+
+function FTGameNetwork:init()
+	print("init.......")
+	if ( self.isAndroid ) then
+		gameNetwork.init("google")
+
+		gameNetwork.request("login",{
+	   		userInitiated = false
+		})
+	else
+		Runtime:addEventListener( "system", onSystemEvent )
+	end
+	
+
+	print("gameNetwork iniciado")
+
+end	
 
 
 function FTGameNetwork:setHighScore(score, lvl) 
