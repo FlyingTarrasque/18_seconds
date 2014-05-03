@@ -15,12 +15,14 @@ background.x, background.y = display.screenOriginX, display.screenOriginY
 require("utils.ads")
 require("utils.ice")
 require("utils.ratePopup")
+require("utils.FTGameNetwork")
+
+leaderboard:init()
+
 local migrations = require("utils.migrations")
 
--- GameNetwork
-local gameNetwork = require("utils.gameNetwork")
-
 local storyboard = require "storyboard"
+
 _G.onSuspending = nil
 local function systemEvents( event )
    print("systemEvent " .. event.type)
@@ -42,8 +44,6 @@ local function systemEvents( event )
    return true
 end
 Runtime:addEventListener( "system", systemEvents )
-
-
 
 --load menu screen
 storyboard.gotoScene(scenesDir .. "menu")

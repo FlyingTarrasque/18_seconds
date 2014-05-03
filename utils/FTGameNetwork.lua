@@ -1,18 +1,40 @@
-local gameNetwork = require "gameNetwork"
+
 
 local loggedIntoGC = false
 
-local isAndroid = system.getInfo("platformName") == "Android"
+local FTGameNetwork = {}
+local FTGameNetwork_mt = { __index = FTGameNetwork }
 
-GameNetwork = {}
+local gameNetwork = require "gameNetwork"
 
-local function alerta(str, callback)
-	--local alert = native.showAlert( str, "...", { "OK", "callback" }, callback)
+function FTGameNetwork:new()
+	local self = {
+		isAndroid = system.getInfo("platformName") == "Android",
+	}
+	setmetatable(self, FTGameNetwork_mt)
+	return self
 end
+
+function FTGameNetwork:init()
+	print("init.......")
+	if ( self.isAndroid ) then
+		gameNetwork.init("google")
+
+		gameNetwork.request("login",{
+	   		userInitiated = false
+		})
+	else
+		Runtime:addEventListener( "system", onSystemEvent )
+	end
+	
+
+	print("gameNetwork iniciado")
+
+end	
 
 -- function to listen for system events
 local function onSystemEvent( event ) 
-	
+	print("on system event")
 	local initCallback =  function(event)
 			-- "showSignIn" is only available on iOS 6+
 	    if event.type == "showSignIn" then
@@ -25,28 +47,13 @@ local function onSystemEvent( event )
 	    --alerta("initCallback event.type: "..event.type.."event.data: "..event.data)
 	end
     if event.type == "applicationStart" then
-    	local callbackIniciarGameCenter = function()
-    		gameNetwork.init( "gamecenter", initCallback )
-   		end
-    	--alerta(event.type, callbackIniciarGameCenter)
+    	gameNetwork.init( "gamecenter", initCallback )
         return true
     end
 end
 
-local function iniciarGameNetwork()
-	if ( isAndroid ) then
-		gameNetwork.init("google")
 
-		gameNetwork.request("login",{
-	   		userInitiated = false
-		})
-	else
-		Runtime:addEventListener( "system", onSystemEvent )
-	end
-
-end	
-
-function GameNetwork:setHighScore(score, lvl) 
+function FTGameNetwork:setHighScore(score, lvl) 
 	if(isAndroid) then
 		local leaderboarListener = function() 
 			gameNetwork.request("setHighScore", {
@@ -69,7 +76,8 @@ function GameNetwork:setHighScore(score, lvl)
 	end
 end
 
-function GameNetwork:showLeaderboard()
+function FTGameNetwork:show()
+	print("showLeaderboard")
 	if(isAndroid) then
 		onSuspending = function()
 			leaderboardBtn.taped = false 
@@ -84,10 +92,10 @@ function GameNetwork:showLeaderboard()
 			});
 		end
 	else
-		gameNetwork.request("loadScores")
+		alerta("showLeaderboard")
 	end
 end
 
-iniciarGameNetwork();
+_G.leaderboard = FTGameNetwork:new()
 
-_G.gameNetwork = gameNetwork
+return FTGameNetwork

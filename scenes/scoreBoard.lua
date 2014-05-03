@@ -4,16 +4,15 @@ local scene = storyboard.newScene()
 local oldScores = ice:loadBox("scores")
 local store = "best" .. currentLvl
 local lvl = require("utils.lvlsConfig")
---local gameNetwork = require("utils.gameNetwork")
 
 local thisGameScore = 0
 
 local finalScore = display.newText("", halfW, 70, fontType, 70)
 local lastScore  = display.newText("", halfW, 170, fontType, 70)
 local playAgainBtn  = display.newText("Play Again!", halfW, halfH + 20, fontType, 40)
---local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
+local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
 local levelSelectBtn = display.newText("Level Select", halfW, halfH + 80, fontType, 40)
---leaderboardBtn.taped = false
+leaderboardBtn.taped = false
 
 finalScore.alpha = 0
 
@@ -60,28 +59,28 @@ function playAgainBtn:tap(event)
 	return true
 end
 
---function leaderboardBtn:tap(event)
---	if leaderboardBtn.taped == true then
---		return true
---	end
---	leaderboardBtn.taped = true
---	local callback = function() gameNetwork:showLeaderboard() end
---	blinkText(leaderboardBtn, callback)
---	return true
---end
+function leaderboardBtn:tap(event)
+	if leaderboardBtn.taped == true then
+		return true
+	end
+	leaderboardBtn.taped = true
+	local callback = function() leaderboard:show() end
+	blinkText(leaderboardBtn, callback)
+	return true
+end
 
 function scene:createScene(event)
 	local group = self.view 
 	thisGameScore = tonumber(event.params["thisGameScore"])
 	
 	playAgainBtn:addEventListener('tap', playAgainBtn)
-	--leaderboardBtn:addEventListener('tap', leaderboardBtn)
+	leaderboardBtn:addEventListener('tap', leaderboardBtn)
 	levelSelectBtn:addEventListener('tap', levelSelectBtn)
 
 	group:insert(finalScore)
 	group:insert(lastScore)
 	group:insert(playAgainBtn)
-	--group:insert(leaderboardBtn)
+	group:insert(leaderboardBtn)
 	group:insert(levelSelectBtn)
 end
 
@@ -98,7 +97,7 @@ function scene:enterScene( event )
 	showMedal(group, actualBestScore, thisGameScore)
 
 	if(actualBestScore < thisGameScore) then
-		--gameNetwork:setHighScore(thisGameScore,lvl)
+		leaderboard:setHighScore(thisGameScore,lvl)
 
 		oldScores:store(store, thisGameScore)
 		oldScores:save()
@@ -118,7 +117,7 @@ function scene:destroyScene( event )
 	local group = self.view
 
 	playAgainBtn:removeEventListener('tap', playAgainBtn)
-	--leaderboardBtn:removeEventListener('tap', leaderboardBtn)
+	leaderboardBtn:removeEventListener('tap', leaderboardBtn)
 	levelSelectBtn:removeEventListener('tap', levelSelectBtn)
 	
 	group:removeSelf()
