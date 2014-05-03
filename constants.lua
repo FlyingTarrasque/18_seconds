@@ -14,5 +14,5 @@ _G.scenesDir = "scenes."
 _G.initialAmount = 10
 _G.appleStoreIdApp = "865483949"
 _G.googlePlayIdApp = "com.gmail.pedrohenriquerls.crushes_finger"
-_G.currentLvl = "facil"
+_G.currentLvl = "easy"
 _G.version = 1

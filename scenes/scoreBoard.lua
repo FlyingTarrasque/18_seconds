@@ -53,6 +53,7 @@ function playAgainBtn:tap(event)
 
 		storyboard.removeScene(scenesDir .. "level")
 		storyboard.gotoScene(scenesDir .. "level", options)
+		ads.show()
 	end
 
 	blinkText(playAgainBtn, callback)
@@ -64,7 +65,8 @@ function leaderboardBtn:tap(event)
 		return true
 	end
 	leaderboardBtn.taped = true
-	local callback = function() leaderboard:show() end
+	local onDimissCallback = function() leaderboardBtn.taped = false end
+	local callback = function() leaderboard:show(lvl, onDimissCallback) end
 	blinkText(leaderboardBtn, callback)
 	return true
 end
@@ -82,6 +84,7 @@ function scene:createScene(event)
 	group:insert(playAgainBtn)
 	group:insert(leaderboardBtn)
 	group:insert(levelSelectBtn)
+	ads:show()
 end
 
 local function showMedal(group, actualBestScore, thisGameScore)

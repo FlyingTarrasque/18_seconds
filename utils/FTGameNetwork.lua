@@ -1,9 +1,19 @@
 
 
-local loggedIntoGC = false
+_G.loggedIntoGC = false
 
 FTGameNetwork = {}
 FTGameNetwork_mt = { __index = FTGameNetwork }
+
+FTGameNetwork.View = {}
+FTGameNetwork.View.Leaderboards = "leaderboards"
+FTGameNetwork.View.Achievements = "achievements" 
+FTGameNetwork.View.FriendRequest = "friendRequest"
+
+FTGameNetwork.TimeScope = {}
+FTGameNetwork.TimeScope.Today = "Today" 
+FTGameNetwork.TimeScope.Week = "Week"
+FTGameNetwork.TimeScope.AllTime = "AllTime"
 
 local gameNetwork = require "gameNetwork"
 
@@ -27,7 +37,6 @@ local function onSystemEvent( event )
 	    elseif event.data then
 	        loggedIntoGC = true
 	    end
-	    --alerta("initCallback event.type: "..event.type.."event.data: "..event.data)
 	end
     if event.type == "applicationStart" then
     	gameNetwork.init( "gamecenter", initCallback )
@@ -46,7 +55,6 @@ function FTGameNetwork:init()
 	else
 		Runtime:addEventListener( "system", onSystemEvent )
 	end
-	
 
 	print("gameNetwork iniciado")
 
@@ -72,17 +80,22 @@ function FTGameNetwork:setHighScore(score, lvl)
 			});
 		end
 	else
-
+		gameNetwork.request( "setHighScore", { 
+			localPlayerScore = { 
+				category = lvl[currentLvl].leaderBoardIdIOS, 
+				value = score * 1000
+			} 
+		})
 	end
 end
 
-function FTGameNetwork:show()
+function FTGameNetwork:show(lvl, onDimissCallback)
 	print("showLeaderboard")
 	if(isAndroid) then
 		onSuspending = function()
 			leaderboardBtn.taped = false 
 		end
-		local leaderboarListener = function() gameNetwork.show("leaderboards") end
+		local leaderboarListener = function() gameNetwork.show(FTGameNetwork.View.Leaderboards) end
 		if gameNetwork.request("isConnected") then
 			leaderboarListener()
 		else
@@ -92,7 +105,19 @@ function FTGameNetwork:show()
 			});
 		end
 	else
-		alerta("showLeaderboard")
+		local data = {
+			leaderboard ={
+				timeScope = FTGameNetwork.TimeScope.AllTime,
+				category = lvl[currentLvl].leaderBoardIdIOS
+			},
+			listener = onDimissCallback
+		}
+		if(lvl ~= nil) then
+			gameNetwork.show( FTGameNetwork.View.Leaderboards, data)
+		else
+			gameNetwork.show( FTGameNetwork.View.Leaderboards, {listener=onDimissCallback})
+		end
+		
 	end
 end
 
