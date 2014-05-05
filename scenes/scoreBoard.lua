@@ -53,7 +53,6 @@ function playAgainBtn:tap(event)
 
 		storyboard.removeScene(scenesDir .. "level")
 		storyboard.gotoScene(scenesDir .. "level", options)
-		ads.show()
 	end
 
 	blinkText(playAgainBtn, callback)
