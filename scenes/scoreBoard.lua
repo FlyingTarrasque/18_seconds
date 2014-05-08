@@ -83,7 +83,6 @@ function scene:createScene(event)
 	group:insert(playAgainBtn)
 	group:insert(leaderboardBtn)
 	group:insert(levelSelectBtn)
-	ads:show()
 end
 
 local function showMedal(group, actualBestScore, thisGameScore)

@@ -26,9 +26,9 @@ local storyboard = require "storyboard"
 
 _G.onSuspending = nil
 local function systemEvents( event )
-   print("systemEvent " .. event.type)
+   --print("systemEvent " .. event.type)
    if ( event.type == "applicationSuspend" ) then
-      print( "suspending..........................." )
+      --print( "suspending..........................." )
    elseif ( event.type == "applicationResume" ) then
       if(onSuspending)then
          onSuspending()
@@ -36,7 +36,7 @@ local function systemEvents( event )
       end
       storyboard.removeAll()
    elseif ( event.type == "applicationExit" ) then
-      print( "exiting.............................." )
+      --print( "exiting.............................." )
    elseif ( event.type == "applicationStart" ) then
       local migrations = require("utils.migrations")
       migrations()

@@ -12,14 +12,14 @@ end
 
 local function adListener(event)
 	local msg = event.response
-	print("Message received from the ads library: ", msg)
+	--print("Message received from the ads library: ", msg)
 	--messages.text = msg
 
 	if event.isError then
-		print("Houve um erro.")
+		--print("Houve um erro.")
 		showAds()
 	else
-		print("Banner deve ser aprensentado.")
+		--print("Banner deve ser aprensentado.")
 	end
 end
 

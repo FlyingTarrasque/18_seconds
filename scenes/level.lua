@@ -63,8 +63,12 @@ local function finishGame()
 		return true
 	end
 
-	timer.cancel(timeCountMilliseconds)
-	timer.cancel(timeCountSeconds)
+	if(timeCountMilliseconds ~= nil) then
+		timer.cancel(timeCountMilliseconds)
+	end
+	if(timeCountSeconds ~= nil) then
+		timer.cancel(timeCountSeconds)
+	end
 
 	gameEnded = true
 
@@ -155,6 +159,8 @@ function scene:createScene(event)
 
 	addEventListeners()
 	configAndStartPhysics()
+	
+	ads:show()
 end
 
 function move(obj)

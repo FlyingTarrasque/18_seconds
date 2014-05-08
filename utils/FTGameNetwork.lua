@@ -27,8 +27,9 @@ end
 
 -- function to listen for system events
 local function onSystemEvent( event ) 
-	print("on system event")
+	print("on system event "..event.type)
 	local initCallback =  function(event)
+		print("callback gamecenter inciado")
 			-- "showSignIn" is only available on iOS 6+
 	    if event.type == "showSignIn" then
 	        -- This is an opportunity to pause your game or do other things you might need to do while the Game Center Sign-In controller is up.
@@ -39,6 +40,7 @@ local function onSystemEvent( event )
 	    end
 	end
     if event.type == "applicationStart" then
+    	print("iniciando gamecenter")
     	gameNetwork.init( "gamecenter", initCallback )
         return true
     end
@@ -55,9 +57,6 @@ function FTGameNetwork:init()
 	else
 		Runtime:addEventListener( "system", onSystemEvent )
 	end
-
-	print("gameNetwork iniciado")
-
 end	
 
 
