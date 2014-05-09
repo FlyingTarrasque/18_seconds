@@ -3,10 +3,10 @@ local scene = storyboard.newScene()
 
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
---local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
+local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
 menuPrincipal:insert(playBtn)
---menuPrincipal:insert(leaderboardBtn)
---leaderboardBtn.taped = false
+menuPrincipal:insert(leaderboardBtn)
+leaderboardBtn.taped = false
 
 local blinkText = function(btn, fn)
 	local callback  = function()
@@ -21,21 +21,22 @@ local blinkText = function(btn, fn)
   timer.performWithDelay(750, function() pcall(fn) end, 1)
 end
 
--- local showLeaderboard = function(event)
--- 	if leaderboardBtn.taped == true then
--- 		return true
--- 	end
--- 	leaderboardBtn.taped = true
--- 	playBtn.isVisible = false
--- 	blinkText(leaderboardBtn, leaderboard:show())
--- 	return true
--- end
+local showLeaderboard = function(event)
+	if leaderboardBtn.taped == true then
+		return true
+	end
+	leaderboardBtn.taped = true
+	--playBtn.isVisible = false
+	local onDimissCallback = function() leaderboardBtn.taped = false end
+	blinkText(leaderboardBtn, leaderboard:show(onDimissCallback))
+	return true
+end
 
 local startGame = function(event)
 	if playBtn.taped then
 		return true
 	end
-
+	
 	playBtn.taped = true
 	local callback = function()
 		storyboard.gotoScene(scenesDir .. "levelSelect", "slideLeft", 500 ) 
@@ -45,7 +46,7 @@ local startGame = function(event)
 end
 
 playBtn:addEventListener('tap', startGame)
---leaderboardBtn:addEventListener('tap', showLeaderboard)
+leaderboardBtn:addEventListener('tap', showLeaderboard)
 
 function scene:createScene( event )
 	local group = self.view
@@ -53,9 +54,7 @@ function scene:createScene( event )
 	_G.title = display.newText("18 Sec.", halfW, 125, fontType, 80)
 
 	group:insert(playBtn)
-	--group:insert(leaderboardBtn)
-	-- local reloadAds = function () ads.show() end
-	-- timer.performWithDelay( 5000, reloadAds , 0 )
+	group:insert(leaderboardBtn)
 end
 
 function scene:enterScene( event )
@@ -66,7 +65,7 @@ function scene:exitScene( event )
 	local group = self.view
 
 	playBtn:removeEventListener('tap', startGame)
-	--leaderboardBtn:removeEventListener('tap', showLeaderboard)
+	leaderboardBtn:removeEventListener('tap', showLeaderboard)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
