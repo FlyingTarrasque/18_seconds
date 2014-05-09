@@ -20,7 +20,7 @@ migrations[1] = function()
 				    value = score * 1000
 				  }
 				})
-		  end
+		  	end
 			if gameNetwork.request("isConnected") then
 				leaderboarListener()
 			else

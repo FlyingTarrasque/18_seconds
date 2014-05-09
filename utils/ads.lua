@@ -10,6 +10,7 @@ local showAds = function()
 	ads.show(adType, {x=adX, y=adY, interval=30})
 end
 
+
 local function adListener(event)
 	local msg = event.response
 	--print("Message received from the ads library: ", msg)
@@ -50,6 +51,17 @@ end
 
 function Ads:show()
 	showAds()
+end
+
+function Ads:showFullscreen()
+	print("mostrando interstitial")
+	if ( system.getInfo("platformName") == "Android" ) then
+		local fullscreenIOSID = "ca-app-pub-4502761084086592/3468850462"
+		ads.show("interstitial", {interval=3, appId=fullscreenIOSID})
+	else
+		local fullscreenIOSID = "ca-app-pub-4502761084086592/3468850462"
+		ads.show("interstitial", {interval=3, appId=fullscreenIOSID})
+	end
 end
 
 function Ads:showThe(newType)

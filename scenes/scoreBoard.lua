@@ -3,7 +3,6 @@ local scene = storyboard.newScene()
 
 local oldScores = ice:loadBox("scores")
 local store = "best" .. currentLvl
-local lvl = require("utils.lvlsConfig")
 
 local thisGameScore = 0
 
@@ -65,7 +64,7 @@ function leaderboardBtn:tap(event)
 	end
 	leaderboardBtn.taped = true
 	local onDimissCallback = function() leaderboardBtn.taped = false end
-	local callback = function() leaderboard:show(lvl, onDimissCallback) end
+	local callback = function() leaderboard:show(onDimissCallback) end
 	blinkText(leaderboardBtn, callback)
 	return true
 end
@@ -98,7 +97,7 @@ function scene:enterScene( event )
 	showMedal(group, actualBestScore, thisGameScore)
 
 	if(actualBestScore < thisGameScore) then
-		leaderboard:setHighScore(thisGameScore,lvl)
+		leaderboard:setHighScore(thisGameScore)
 
 		oldScores:store(store, thisGameScore)
 		oldScores:save()

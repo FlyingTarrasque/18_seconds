@@ -16,6 +16,8 @@ FTGameNetwork.TimeScope.Week = "Week"
 FTGameNetwork.TimeScope.AllTime = "AllTime"
 
 local gameNetwork = require "gameNetwork"
+local scores = ice:loadBox("scores")
+local lvl = require("utils.lvlsConfig")
 
 function FTGameNetwork:new()
 	local self = {
@@ -25,20 +27,23 @@ function FTGameNetwork:new()
 	return self
 end
 
+local initCallback =  function(event)
+	print("callback gamecenter inciado")
+	leaderboard:sendBestScores()
+	
+		-- "showSignIn" is only available on iOS 6+
+    if event.type == "showSignIn" then
+        -- This is an opportunity to pause your game or do other things you might need to do while the Game Center Sign-In controller is up.
+        -- For the iOS 6.0 landscape orientation bug, this is an opportunity to remove native objects so they won't rotate.
+        -- This is type "init" for all versions of Game Center.
+    elseif event.data then
+        loggedIntoGC = true
+    end
+end
 -- function to listen for system events
 local function onSystemEvent( event ) 
 	print("on system event "..event.type)
-	local initCallback =  function(event)
-		print("callback gamecenter inciado")
-			-- "showSignIn" is only available on iOS 6+
-	    if event.type == "showSignIn" then
-	        -- This is an opportunity to pause your game or do other things you might need to do while the Game Center Sign-In controller is up.
-	        -- For the iOS 6.0 landscape orientation bug, this is an opportunity to remove native objects so they won't rotate.
-	        -- This is type "init" for all versions of Game Center.
-	    elseif event.data then
-	        loggedIntoGC = true
-	    end
-	end
+	
     if event.type == "applicationStart" then
     	print("iniciando gamecenter")
     	gameNetwork.init( "gamecenter", initCallback )
@@ -46,10 +51,26 @@ local function onSystemEvent( event )
     end
 end
 
+function FTGameNetwork:sendBestScores()
+	print("enviando scores...")
+	local function sendScore(levelName)
+		local score = scores:retrieve("best"..levelName) or 0
+		if score == 0 then
+			return false
+		end
+		self:setHighScore(score,levelName)
+		print("score level"..levelName.." enviado!")
+	end
+	
+	sendScore("easy")
+	sendScore("normal")
+	sendScore("hard")
+end
+
 function FTGameNetwork:init()
 	print("init.......")
 	if ( self.isAndroid ) then
-		gameNetwork.init("google")
+		gameNetwork.init("google", initCallback)
 
 		gameNetwork.request("login",{
 	   		userInitiated = false
@@ -60,12 +81,16 @@ function FTGameNetwork:init()
 end	
 
 
-function FTGameNetwork:setHighScore(score, lvl) 
+function FTGameNetwork:setHighScore(score, levelName) 
+	if levelName == nil then
+		levelName = currentLvl
+	end
+
 	if(isAndroid) then
 		local leaderboarListener = function() 
 			gameNetwork.request("setHighScore", {
 			  localPlayerScore = {
-			    category = lvl[currentLvl].leaderBoardId,
+			    category = lvl[levelName].leaderBoardId,
 			    value = score * 1000
 			  }
 			})
@@ -81,14 +106,14 @@ function FTGameNetwork:setHighScore(score, lvl)
 	else
 		gameNetwork.request( "setHighScore", { 
 			localPlayerScore = { 
-				category = lvl[currentLvl].leaderBoardIdIOS, 
+				category = lvl[levelName].leaderBoardIdIOS, 
 				value = score * 1000
 			} 
 		})
 	end
 end
 
-function FTGameNetwork:show(lvl, onDimissCallback)
+function FTGameNetwork:show(onDimissCallback)
 	print("showLeaderboard")
 	if(isAndroid) then
 		onSuspending = function()
