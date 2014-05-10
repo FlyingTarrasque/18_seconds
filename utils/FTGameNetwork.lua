@@ -29,8 +29,11 @@ end
 
 local initCallback =  function(event)
 	print("callback gamecenter inciado")
-	leaderboard:sendBestScores()
-	
+	if(isAndroid) then
+		leaderboard:sendBestScoresAndroid()
+	else
+		leaderboard:updateBestScoresIOS()	
+	end
 		-- "showSignIn" is only available on iOS 6+
     if event.type == "showSignIn" then
         -- This is an opportunity to pause your game or do other things you might need to do while the Game Center Sign-In controller is up.
@@ -51,20 +54,69 @@ local function onSystemEvent( event )
     end
 end
 
-function FTGameNetwork:sendBestScores()
+function FTGameNetwork:updateBestScoresIOS()
+	print("carregando scores do gamecenter")
+	local requestCallback = function(event)
+		if(event.localPlayerScore  == nil) then
+			return false  
+		end
+
+		local categories = {}
+		categories[lvl["easy"].leaderBoardIdIOS] = "easy"
+		categories[lvl["normal"].leaderBoardIdIOS] = "normal"
+		categories[lvl["hard"].leaderBoardIdIOS] = "hard"
+		
+		local levelName = categories[event.localPlayerScore.category]
+		local storeName = "best"..levelName
+		print("levelName: "..levelName)
+		local localScore = scores:retrieve(storeName) or 0
+		print("localScore"..localScore)
+		local gcScore = event.localPlayerScore.value / 1000 or 0
+		print("gcScore"..gcScore)
+
+		if(localScore > gcScore) then
+			print("localScore maior... atualizando gamecenter")
+			self:setHighScore(localScore, levelName)
+		elseif(gcScore > localScore) then
+			print("gamecenter maior... atualizando base local")
+			scores:store(storeName, gcScore)
+			scores:save()
+		end
+	end
+	self:loadScore("easy",requestCallback)
+	self:loadScore("normal",requestCallback)
+	self:loadScore("hard",requestCallback)
+end
+
+function FTGameNetwork:sendBestScoresAndroid(levelName)
 	print("enviando scores...")
 	local function sendScore(levelName)
-		local score = scores:retrieve("best"..levelName) or 0
-		if score == 0 then
+		local localScore = scores:retrieve("best"..levelName) or 0
+		if localScore == 0 then
 			return false
 		end
-		self:setHighScore(score,levelName)
+		print("localScore level"..levelName..": "..localScore)
+		self:setHighScore(localScore,levelName)
 		print("score level"..levelName.." enviado!")
 	end
 	
 	sendScore("easy")
 	sendScore("normal")
 	sendScore("hard")
+end
+
+function FTGameNetwork:loadScore(levelName,requestCallback)
+	print("category: "..lvl[levelName].leaderBoardIdIOS)
+	gameNetwork.request( "loadScores",{
+	    leaderboard = {
+	        category=lvl[levelName].leaderBoardIdIOS,
+	        playerScope="Global",   -- Global, FriendsOnly
+	        timeScope= FTGameNetwork.TimeScope.AllTime,    -- AllTime, Week, Today
+	        range = {1,1}, --Just get one player 
+            playerCentered = true
+	    },
+	    listener=requestCallback
+	})
 end
 
 function FTGameNetwork:init()
@@ -135,13 +187,8 @@ function FTGameNetwork:show(onDimissCallback)
 				category = lvl[currentLvl].leaderBoardIdIOS
 			},
 			listener = onDimissCallback
-		}
-		if(lvl ~= nil) then
-			gameNetwork.show( FTGameNetwork.View.Leaderboards, data)
-		else
-			gameNetwork.show( FTGameNetwork.View.Leaderboards, {listener=onDimissCallback})
-		end
-		
+		}	
+		gameNetwork.show( FTGameNetwork.View.Leaderboards, data)
 	end
 end
 
