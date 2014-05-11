@@ -1,6 +1,8 @@
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
+local flags = ice:loadBox("flags")
+
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
 local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
@@ -39,7 +41,15 @@ local startGame = function(event)
 	
 	playBtn.taped = true
 	local callback = function()
-		storyboard.gotoScene(scenesDir .. "levelSelect", "slideLeft", 500 ) 
+		local tutorialCompleto = flags:retrieve("tutorial") or false
+		if(tutorialCompleto) then
+			storyboard.gotoScene(scenesDir .. "levelSelect", "slideLeft", 500 ) 
+		else
+			storyboard.gotoScene(scenesDir .. "tutorialPassoUm", "slideLeft", 500 ) 	
+			flags:store("tutorial",true)
+			flags:save()
+		end
+		
 	end
 	blinkText(playBtn, callback)
 	return true

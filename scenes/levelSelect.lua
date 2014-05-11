@@ -67,12 +67,17 @@ function scene:createScene( event )
 		hard:addEventListener('tap', startGame)
 		hard.alpha = 1
 	end
-
+	
 	group:insert(menuLvl)
 end
 
 function scene:enterScene( event )
 	local group = self.view
+
+end
+
+function scene:willEnterScene( event )
+	transition.to(title, {time=300,x=title.x, y=125, delay=300})
 end
 
 function scene:exitScene( event )
@@ -110,6 +115,7 @@ scene:addEventListener( "exitScene", scene )
 -- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
+scene:addEventListener("willEnterScene",scene)
 -----------------------------------------------------------------------------------------
 
 return scene
