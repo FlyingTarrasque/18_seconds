@@ -25,19 +25,16 @@ function scene:createScene( event )
 	group = self.view
 	group:insert(stepOne)
 	group:insert(tipOne)
-
-	g = group
-	transition.to(title, {time=100,x=title.x, y=title.y-125})
 end
 
 function scene:willEnterScene( event )
+	transition.to(title, {time=100,x=title.x, y=title.y-125})
 	stepTwoDot.alpha = 0.5
 	stepOneDot.alpha = 1
 end
 
 function scene:enterScene( event )
 	local group = self.view
-
 
 	Runtime:addEventListener("touch", onSceneTouch)
 end

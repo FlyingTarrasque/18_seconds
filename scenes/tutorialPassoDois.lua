@@ -1,5 +1,6 @@
 
 local storyboard = require( "storyboard" )
+local flags = ice:loadBox("flags")
 local scene = storyboard.newScene()
 local stepTwo = display.newImage(imagesDir .. "passoDois.png", halfW, halfH + 30, 0, 0)
 local tipTwo = display.newText("... slide to dodge. Hold 18 seconds!", halfW, 65, fontType, 30)
@@ -12,9 +13,16 @@ local function onSceneTouch( event )
 		if event.xStart < event.x and (event.x - event.xStart) >= 200 then
 			storyboard.gotoScene( scenesDir.."tutorialPassoUm", "slideRight", 1000 )
 		elseif event.xStart > event.x and (event.xStart - event.x) >= 200 then
-			stepOneDot:removeSelf()
-			stepTwoDot:removeSelf()
-			storyboard.gotoScene( scenesDir.."levelSelect", "slideLeft", 1000 )
+			stepOneDot.alpha = 0
+			stepTwoDot.alpha = 0
+			local tutorialCompleto = flags:retrieve("tutorial") or false
+			if(tutorialCompleto) then
+				storyboard.gotoScene( scenesDir.."menu", "slideLeft", 1000 )
+			else
+				flags:store("tutorial",true)
+				flags:save()
+				storyboard.gotoScene( scenesDir.."levelSelect", "slideLeft", 1000 )
+			end
 			return true
 		else
 			transition.to(group, {time=400, x=0})

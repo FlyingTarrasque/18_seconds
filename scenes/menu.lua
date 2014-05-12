@@ -5,9 +5,13 @@ local flags = ice:loadBox("flags")
 
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
-local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 140, fontType, 40)
+local howToPlayBtn = display.newText("How to play", halfW, halfH + 140, fontType, 40)
+local leaderboardBtn = display.newText("Leaderboards", halfW, halfH + 200, fontType, 40)
+
 menuPrincipal:insert(playBtn)
 menuPrincipal:insert(leaderboardBtn)
+menuPrincipal:insert(howToPlayBtn)
+
 leaderboardBtn.taped = false
 
 local blinkText = function(btn, fn)
@@ -46,8 +50,6 @@ local startGame = function(event)
 			storyboard.gotoScene(scenesDir .. "levelSelect", "slideLeft", 500 ) 
 		else
 			storyboard.gotoScene(scenesDir .. "tutorialPassoUm", "slideLeft", 500 ) 	
-			flags:store("tutorial",true)
-			flags:save()
 		end
 		
 	end
@@ -55,27 +57,44 @@ local startGame = function(event)
 	return true
 end
 
-playBtn:addEventListener('tap', startGame)
-leaderboardBtn:addEventListener('tap', showLeaderboard)
+local showTutorial = function(event)
+	local callback = function()
+		storyboard.gotoScene(scenesDir .. "tutorialPassoUm", "slideLeft", 500 ) 
+	end
+	blinkText(howToPlayBtn,callback)
+end
+
 
 function scene:createScene( event )
 	local group = self.view
 
 	_G.title = display.newText("18 Sec.", halfW, 125, fontType, 80)
 
-	group:insert(playBtn)
-	group:insert(leaderboardBtn)
+	group:insert(menuPrincipal)
+	-- group:insert(leaderboardBtn)
+	-- group:insert(howToPlayBtn)
 end
 
 function scene:enterScene( event )
 	local group = self.view
+
+	playBtn:addEventListener('tap', startGame)
+	leaderboardBtn:addEventListener('tap', showLeaderboard)
+	howToPlayBtn:addEventListener('tap',showTutorial)
+end
+
+function scene:willEnterScene( event )
+	transition.to(title, {time=300,x=title.x, y=125, delay=300})
 end
 
 function scene:exitScene( event )
 	local group = self.view
 
+	-- menuPrincipal:removeSelf()
+
 	playBtn:removeEventListener('tap', startGame)
 	leaderboardBtn:removeEventListener('tap', showLeaderboard)
+	howToPlayBtn:removeEventListener('tap',showTutorial)
 end
 
 -- If scene's view is removed, scene:destroyScene() will be called just prior to:
@@ -101,6 +120,7 @@ scene:addEventListener( "exitScene", scene )
 -- storyboard.purgeScene() or storyboard.removeScene().
 scene:addEventListener( "destroyScene", scene )
 
+scene:addEventListener("willEnterScene",scene)
 -----------------------------------------------------------------------------------------
 
 return scene
