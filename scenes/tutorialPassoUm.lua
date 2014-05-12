@@ -28,7 +28,7 @@ function scene:createScene( event )
 end
 
 function scene:willEnterScene( event )
-	transition.to(title, {time=100,x=title.x, y=title.y-125})
+	transition.to(title, {time=100,x=title.x, y=0})
 	stepTwoDot.alpha = 0.5
 	stepOneDot.alpha = 1
 end
