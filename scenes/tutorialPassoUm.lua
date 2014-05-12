@@ -16,7 +16,7 @@ local function onSceneTouch( event )
 			storyboard.gotoScene( scenesDir.."tutorialPassoDois", "slideLeft", 1000 )
 			return true
 		else
-			group.x = 0
+			transition.to(group, {time=400, x=0})
 		end
 	end
 end
