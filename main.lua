@@ -5,7 +5,7 @@
 -----------------------------------------------------------------------------------------
 
 -- hide the status bar
---io.output():setvbuf('no')
+io.output():setvbuf('no')
 require("constants")
 
 display.setStatusBar(display.HiddenStatusBar)

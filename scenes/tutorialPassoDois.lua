@@ -3,23 +3,27 @@ local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 local stepTwo = display.newImage(imagesDir .. "passoDois.png", halfW, halfH + 30, 0, 0)
 local tipTwo = display.newText("... slide to dodge. Hold 18 seconds!", halfW, 65, fontType, 30)
+local group
 
 local function onSceneTouch( event )
-	if event.phase == "ended" then
-		if event.xStart < event.x and (event.x - event.xStart) >= 100 then
+	if event.phase == "moved" then
+		group.x = event.x - event.xStart
+	elseif event.phase == "ended" then
+		if event.xStart < event.x and (event.x - event.xStart) >= 200 then
 			storyboard.gotoScene( scenesDir.."tutorialPassoUm", "slideRight", 1000 )
+		elseif event.xStart > event.x and (event.xStart - event.x) >= 200 then
+			stepOneDot:removeSelf()
+			stepTwoDot:removeSelf()
+			storyboard.gotoScene( scenesDir.."levelSelect", "slideLeft", 1000 )
 			return true
+		else
+			group.x = 0
 		end
-	elseif event.xStart > event.x and (event.xStart - event.x) >= 100 then
-		stepOneDot:removeSelf()
-		stepTwoDot:removeSelf()
-		storyboard.gotoScene( scenesDir.."levelSelect", "slideLeft", 1000 )
-		return true
 	end
 end
 
 function scene:createScene( event )
-	local group = self.view
+	group = self.view
 	group:insert(stepTwo)
 	group:insert(tipTwo)
 end

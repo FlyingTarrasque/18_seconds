@@ -5,24 +5,28 @@ local stepOne = display.newImage(imagesDir .. "passoUm.png", halfW, halfH + 30, 
 local tipOne = display.newText("Touch and hold the red circle ...", halfW, 65, fontType, 30)
 stepOneDot = display.newCircle(halfW - 20, screenH, 8)
 stepTwoDot = display.newCircle(halfW + 20, screenH, 8)
-
+local group
 
 local function onSceneTouch( event )
-	if event.phase == "ended" then
-		if event.xStart < event.x and (event.x - event.xStart) >= 100 then
+	if event.phase == "moved" then
+		group.x = event.x - event.xStart
+	elseif event.phase == "ended" then
+		print("ended"..event.xStart.." "..event.x)
+		if event.xStart > event.x and (event.xStart - event.x) >= 200 then
+			storyboard.gotoScene( scenesDir.."tutorialPassoDois", "slideLeft", 1000 )
 			return true
+		else
+			group.x = 0
 		end
-	elseif event.xStart > event.x and (event.xStart - event.x) >= 100 then
-		storyboard.gotoScene( scenesDir.."tutorialPassoDois", "slideLeft", 1000 )
-		return true
 	end
 end
 
 function scene:createScene( event )
-	local group = self.view
+	group = self.view
 	group:insert(stepOne)
 	group:insert(tipOne)
 
+	g = group
 	transition.to(title, {time=100,x=title.x, y=title.y-125})
 end
 

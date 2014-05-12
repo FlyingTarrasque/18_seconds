@@ -70,9 +70,9 @@ function FTGameNetwork:updateBestScoresIOS()
 		local storeName = "best"..levelName
 		print("levelName: "..levelName)
 		local localScore = scores:retrieve(storeName) or 0
-		print("localScore"..localScore)
+		print("localScore "..localScore)
 		local gcScore = event.localPlayerScore.value / 1000 or 0
-		print("gcScore"..gcScore)
+		print("gcScore "..gcScore)
 
 		if(localScore > gcScore) then
 			print("localScore maior... atualizando gamecenter")
