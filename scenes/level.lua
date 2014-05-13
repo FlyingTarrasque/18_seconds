@@ -17,6 +17,10 @@ local largeHorizontalRect = display.newImage(imagesDir .. "largeHorizontalRect.p
 local largeVerticalRect = display.newImage(imagesDir .. "largeVerticalRect.png", 120, 380, 30, 75)
 local fatRect = display.newImage(imagesDir .. "fatRect.png", 370, 110, 68, 50)
 local square = display.newImage(imagesDir .. "square.png", 120, 110, 57, 57)
+square.name="square"
+fatRect.name="fatRect"
+largeHorizontalRect.name="largeHorizontalRect"
+largeVerticalRect.name="largeVerticalRect"
 
 local finger = display.newCircle( halfW, halfH, 15 )
 finger.alpha = 0
@@ -39,6 +43,10 @@ left = display.newLine(0, screenH, 0, 0)
 right = display.newLine(screenW, screenH, screenW + 2, 0)
 up = display.newLine(0, 0, screenW, 0)
 bottom = display.newLine(screenW, screenH, 0, screenH)
+left.name="left"
+right.name="right"
+up.name="up"
+bottom.name="bottom"
 
 up.isVisible = false
 left.isVisible = false
@@ -83,7 +91,6 @@ end
 
 local function onTouchListener( event )
 	local t = event.target
-	local moveBegan = false
 	local phase = event.phase
 	local began = function()
 		if(gameStarted == false)then
@@ -97,24 +104,27 @@ local function onTouchListener( event )
 		
 		t.x0 = event.x - t.x
 		t.y0 = event.y - t.y
-		moveBegan = true
 	end
 
 	if "began" == phase then
 		began()
 	elseif "moved" == phase then
-			if(not moveBegan) then
+
+			if(t.x0 == nil or t.y0 == nil) then
 				began()
 			end
+
 			t.x = event.x - t.x0
 			t.y = event.y - t.y0
 			limitMax = lvl[currentLvl].limitMax
 			limitMin = lvl[currentLvl].limitMin
 			if (t.y > limitMax or t.x > limitMax) or (t.y < limitMin or t.x < limitMin) then
+				print("moved finished")
 				system.vibrate()
 				finishGame()
 			end
 		elseif "ended" == phase or "cancelled" == phase then
+			print("ended finished")
 			display.getCurrentStage():setFocus( t, nil )
 			t.isFocus = false
 			finishGame()
@@ -185,8 +195,11 @@ end
 
 local function onCollision( event )
 	if(event.object1.name ~= nil or event.object2.name ~= nil) then
+		print("onCollision finished, "..event.object2.name.." - "..event.object1.name)
+		if(event.object1.name=="finger" or event.object2.name=="finger") then
 		system.vibrate()
 		finishGame()
+	end
 		return true
 	end
 end
