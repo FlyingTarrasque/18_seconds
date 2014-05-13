@@ -1,7 +1,9 @@
+require("utils.ads")
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
 local oldScores = ice:loadBox("scores")
+local settings = ice:loadBox("settings")
 local store = "best" .. currentLvl
 
 local thisGameScore = 0
@@ -53,7 +55,7 @@ function playAgainBtn:tap(event)
 		storyboard.removeScene(scenesDir .. "level")
 		storyboard.gotoScene(scenesDir .. "level", options)
 	end
-
+	ads:preLoadFullscreenRevMob()
 	blinkText(playAgainBtn, callback)
 	return true
 end
@@ -107,6 +109,10 @@ function scene:enterScene( event )
 		lastScore.text  = "Score: "..tostring(thisGameScore)
 		finalScore.text = "Best: "..tostring(actualBestScore)
 	end	
+	local gamesPlayed = settings:retrieve("gamesPlayed") or 0
+	if(gamesPlayed % 6 == 0 ) then
+		ads:showFullscreenRevMob()
+	end
 end
 
 function scene:exitScene( event )

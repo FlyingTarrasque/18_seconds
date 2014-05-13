@@ -1,7 +1,9 @@
+require("utils.ads")
+
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
 
-local flags = ice:loadBox("flags")
+local settings = ice:loadBox("settings")
 
 local menuPrincipal = display.newGroup()
 local playBtn = display.newText("START!", halfW, halfH + 80, fontType, 40)
@@ -45,7 +47,7 @@ local startGame = function(event)
 	
 	playBtn.taped = true
 	local callback = function()
-		local tutorialCompleto = flags:retrieve("tutorial") or false
+		local tutorialCompleto = settings:retrieve("tutorial") or false
 		if(tutorialCompleto) then
 			storyboard.gotoScene(scenesDir .. "levelSelect", "slideLeft", 500 ) 
 		else
@@ -53,6 +55,7 @@ local startGame = function(event)
 		end
 		
 	end
+	ads:preLoadFullscreenRevMob()
 	blinkText(playBtn, callback)
 	return true
 end

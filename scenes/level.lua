@@ -83,9 +83,9 @@ end
 
 local function onTouchListener( event )
 	local t = event.target
-
+	local moveBegan = false
 	local phase = event.phase
-	if "began" == phase then
+	local began = function()
 		if(gameStarted == false)then
 			startGame()
 		end
@@ -94,10 +94,18 @@ local function onTouchListener( event )
 		display.getCurrentStage():setFocus( t, event.id )
 
 		t.isFocus = true
-
+		
 		t.x0 = event.x - t.x
 		t.y0 = event.y - t.y
+		moveBegan = true
+	end
+
+	if "began" == phase then
+		began()
 	elseif "moved" == phase then
+			if(not moveBegan) then
+				began()
+			end
 			t.x = event.x - t.x0
 			t.y = event.y - t.y0
 			limitMax = lvl[currentLvl].limitMax
@@ -160,7 +168,7 @@ function scene:createScene(event)
 	addEventListeners()
 	configAndStartPhysics()
 	
-	ads:show()
+	--ads:show()
 end
 
 function move(obj)
