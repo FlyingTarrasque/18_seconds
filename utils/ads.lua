@@ -33,7 +33,9 @@ end
 local revmobListener = function(event)
 	if(event.type == "adClosed") then
 		showAds()
+	elseif(event.type == "s") then
 	end
+
   	print("Event: " .. event.type)
 end
 
@@ -86,7 +88,9 @@ function Ads:preLoadFullscreenRevMob()
 end
 
 function Ads:showFullscreenRevMob()
-	ads.hide()
+	--ads.hide()
+	print("mostrando fullscreen RevMob"..REVMOB_ID_IOS)
+	print(self.fullscreen)
 	if(self.fullscreen ~= nil) then
 		self.fullscreen:show()
 	else
